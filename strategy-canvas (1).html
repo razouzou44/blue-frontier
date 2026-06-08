@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blue Frontier — Strategy Canvas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e9eef3; --bg2:#dfe8f0;
+  --panel:#ffffff; --panel-2:#f6f9fc;
+  --ink:#0d2233; --muted:#5e7184; --faint:#90a2b3;
+  --line:#e2eaf1; --hair:#d4dfe9;
+  --accent:#0e8ce4; --accent-soft:#e6f2fb;
+  --shadow:0 1px 2px rgba(13,34,51,.05),0 10px 30px -12px rgba(13,34,51,.18);
+  --radius:16px;
+}
+html[data-theme="dark"]{
+  --bg:#06101c; --bg2:#0a1726;
+  --panel:#0e1f31; --panel-2:#11253a;
+  --ink:#e9f2fa; --muted:#90a6ba; --faint:#5e7588;
+  --line:#1a3047; --hair:#22394f;
+  --accent:#2fa8ff; --accent-soft:#0f2b42;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px -16px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Hanken Grotesk",system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1100px 600px at 88% -10%, color-mix(in srgb,var(--accent) 16%, transparent), transparent 60%),
+    radial-gradient(900px 600px at -5% 110%, color-mix(in srgb,var(--accent) 12%, transparent), transparent 55%),
+    linear-gradient(160deg,var(--bg),var(--bg2));
+  background-attachment:fixed;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:48px;
+}
+.wrap{max-width:1240px;margin:0 auto;padding:18px 20px 0}
+
+/* Top bar */
+.topbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700}
+.logo{width:34px;height:34px;border-radius:10px;position:relative;flex:none;
+  background:linear-gradient(150deg,var(--accent),#16c6c6);box-shadow:0 6px 16px -6px var(--accent)}
+.logo::after{content:"";position:absolute;inset:7px 6px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  border:2px solid rgba(255,255,255,.85);border-top-color:transparent;transform:rotate(-20deg)}
+.brand .name{font-family:"Fraunces",serif;font-size:21px;letter-spacing:.2px}
+.brand .name b{font-weight:600}
+.brand .name span{color:var(--accent)}
+.crumb{color:var(--faint);font-size:13px;margin-left:2px}
+.topbar .spacer{flex:1}
+.proj{display:flex;align-items:center;gap:10px}
+.proj input{font-family:"Fraunces",serif;font-size:15px;font-weight:500;color:var(--ink);
+  background:transparent;border:0;border-bottom:1.5px dashed transparent;padding:3px 2px;min-width:170px}
+.proj input:hover{border-bottom-color:var(--hair)}
+.proj input:focus{outline:0;border-bottom-color:var(--accent)}
+.pill{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+  padding:4px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.avatars{display:flex}
+.avatars span{width:27px;height:27px;border-radius:50%;border:2px solid var(--panel);
+  margin-left:-8px;font-size:11px;font-weight:700;color:#fff;display:grid;place-items:center}
+.btn{font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;
+  background:var(--panel);border:1px solid var(--hair);border-radius:11px;padding:9px 13px;
+  display:inline-flex;align-items:center;gap:7px;transition:.15s;box-shadow:var(--shadow)}
+.btn:hover{transform:translateY(-1px);border-color:var(--accent)}
+.btn.ghost{background:transparent;box-shadow:none}
+.btn.accent{background:linear-gradient(150deg,var(--accent),#16b6c6);color:#fff;border-color:transparent}
+.btn.icon{padding:9px;width:38px;justify-content:center}
+.btn.sm{padding:6px 9px;font-size:12px;border-radius:9px;box-shadow:none}
+select.btn{appearance:none;padding-right:28px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237d8da1' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 11px center}
+
+/* Layout */
+.grid{display:grid;grid-template-columns:1fr 330px;gap:18px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.chart-card{padding:18px 18px 8px}
+.chart-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:2px 4px 8px}
+.chart-head h2{font-family:"Fraunces",serif;font-weight:600;font-size:18px;margin:0}
+.chart-head p{margin:0;color:var(--muted);font-size:12.5px}
+.chart-head .hint{margin-left:auto;font-size:12px;color:var(--faint);display:flex;align-items:center;gap:6px}
+
+svg.canvas{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
+.pt-hit{fill:transparent;cursor:grab;touch-action:none}
+.pt-hit:active{cursor:grabbing}
+.gline{stroke:var(--hair);stroke-width:1}
+.gline.zero{stroke:var(--line);stroke-width:1.5}
+.axislab{fill:var(--faint);font-size:12px;font-family:"Hanken Grotesk",sans-serif}
+.flab{fill:var(--ink);font-size:12.5px;font-weight:600;font-family:"Hanken Grotesk",sans-serif}
+.ytitle{fill:var(--muted);font-size:12px;font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+
+/* Factor editor */
+.factors{padding:6px 14px 16px}
+.factors .lbl{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--faint);margin:4px 4px 10px}
+.frow{display:flex;gap:9px;overflow-x:auto;padding-bottom:6px}
+.fchip{flex:none;width:138px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:9px 10px}
+.fchip input{width:100%;border:0;background:transparent;color:var(--ink);font:inherit;font-size:12.5px;font-weight:600;padding:2px 0}
+.fchip input:focus{outline:0}
+.fchip .fbar{display:flex;justify-content:space-between;margin-top:6px}
+.minibtn{border:0;background:transparent;color:var(--faint);cursor:pointer;font-size:13px;padding:3px 5px;border-radius:7px;line-height:1}
+.minibtn:hover{background:var(--accent-soft);color:var(--accent)}
+.fchip.add{display:grid;place-items:center;cursor:pointer;border-style:dashed;color:var(--muted);font-weight:600;font-size:13px}
+.fchip.add:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Sidebar */
+.side{display:flex;flex-direction:column;gap:18px}
+.panel{padding:16px}
+.panel h3{font-family:"Fraunces",serif;font-weight:600;font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.series{display:flex;flex-direction:column;gap:9px}
+.srow{display:flex;align-items:center;gap:9px;padding:8px;border-radius:11px;border:1px solid var(--line);background:var(--panel-2)}
+.srow.off{opacity:.5}
+.swatch{width:14px;height:14px;border-radius:5px;flex:none;border:2px solid var(--panel)}
+.eye{border:0;background:transparent;cursor:pointer;font-size:14px;color:var(--faint);padding:2px}
+.srow .sname{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;font-weight:600}
+.srow .sname:focus{outline:0}
+.srow select{font:inherit;font-size:11px;font-weight:600;color:var(--muted);background:var(--panel);border:1px solid var(--hair);border-radius:8px;padding:4px 6px;cursor:pointer}
+.srow input[type=color]{width:24px;height:24px;border:0;background:none;padding:0;cursor:pointer;border-radius:6px}
+.srow input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+.srow input[type=color]::-webkit-color-swatch{border:1px solid var(--hair);border-radius:6px}
+.srow .del{border:0;background:transparent;color:var(--faint);cursor:pointer;font-size:14px;padding:2px}
+.srow .del:hover{color:#e8643c}
+.addseries{margin-top:11px;width:100%;justify-content:center}
+
+/* Insight */
+.meter{height:9px;border-radius:999px;background:var(--line);overflow:hidden;margin:4px 0 4px}
+.meter > i{display:block;height:100%;border-radius:999px;transition:width .35s ease;
+  background:linear-gradient(90deg,#e8643c,#e8a93c,#16b6c6,var(--accent))}
+.meter-meta{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:12px}
+.verdict{font-weight:800}
+.errc{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 12px}
+.epill{border-radius:10px;padding:9px 10px;border:1px solid var(--line);background:var(--panel-2)}
+.epill .k{font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--faint)}
+.epill .v{font-family:"Fraunces",serif;font-size:22px;font-weight:600;line-height:1.1}
+.epill.cre{border-left:3px solid var(--accent)} .epill.eli{border-left:3px solid #e8643c}
+.epill.rai{border-left:3px solid #16b6c6} .epill.red{border-left:3px solid #e8a93c}
+.copilot{display:flex;gap:10px;align-items:flex-start;background:var(--accent-soft);
+  border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);border-radius:12px;padding:11px 12px}
+.copilot .ic{width:26px;height:26px;border-radius:8px;flex:none;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(150deg,var(--accent),#16b6c6);font-size:14px}
+.copilot p{margin:0;font-size:12.5px;line-height:1.45;color:var(--ink)}
+.copilot b{color:var(--accent)}
+
+/* Tooltip */
+#tip{position:fixed;pointer-events:none;z-index:50;background:var(--ink);color:var(--panel);
+  font-size:12px;font-weight:600;padding:6px 9px;border-radius:9px;opacity:0;transform:translate(-50%,-140%);
+  transition:opacity .12s;white-space:nowrap;box-shadow:0 8px 20px -6px rgba(0,0,0,.4)}
+#tip b{color:var(--accent);font-weight:800}
+
+.foot{max-width:1240px;margin:18px auto 0;padding:0 20px;color:var(--faint);font-size:11.5px;text-align:center}
+
+/* ── Print / PDF ── */
+.print-view{display:none}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body{background:#fff!important;padding:0;margin:0}
+  .wrap,.topbar,.grid,.factors,.foot,#tip{display:none!important}
+  .print-view{display:block!important;font-family:"Hanken Grotesk",sans-serif;color:#0d2233;padding:0;margin:0}
+  @page{size:A4 landscape;margin:1.4cm 1.6cm}
+  .pv-page{page-break-after:always}
+  .pv-page:last-child{page-break-after:avoid}
+}
+.pv-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid #0e8ce4;margin-bottom:20px}
+.pv-brand{display:flex;align-items:center;gap:10px}
+.pv-logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#0e8ce4,#16b6c6);position:relative;flex:none}
+.pv-logo::before{content:"";position:absolute;inset:7px 6px;border-radius:50%;border:2px solid rgba(255,255,255,.9);border-top-color:transparent;transform:rotate(-20deg)}
+.pv-title{font-family:"Fraunces",serif;font-size:15px;font-weight:700;color:#0d2233}
+.pv-title span{color:#0e8ce4}
+.pv-meta{text-align:right;font-size:11px;color:#5e7184}
+.pv-meta b{display:block;font-size:14px;color:#0d2233;font-family:"Fraunces",serif;font-weight:600}
+.pv-section{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#0e8ce4;margin:18px 0 10px}
+.pv-canvas-wrap{text-align:center;background:#f4f8fc;border-radius:12px;padding:12px;border:1px solid #e0eaf2}
+.pv-canvas-wrap img{max-width:100%;height:auto}
+.pv-legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:10px;justify-content:center}
+.pv-leg-item{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#0d2233}
+.pv-leg-dot{width:28px;height:4px;border-radius:2px}
+.pv-errc{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.pv-eq{border-radius:10px;padding:12px 14px;border-left:4px solid}
+.pv-eq .ek{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#5e7184;margin-bottom:4px}
+.pv-eq .ev{font-family:"Fraunces",serif;font-size:26px;font-weight:700;line-height:1}
+.pv-eq .edet{font-size:11.5px;color:#5e7184;margin-top:6px;line-height:1.4}
+.pv-eq.eli{background:#fff4f2;border-color:#e8643c}.pv-eq.rai{background:#e8f8f5;border-color:#16b6c6}
+.pv-eq.red{background:#fff8ed;border-color:#e8a93c}.pv-eq.cre{background:#e6f2fb;border-color:#0e8ce4}
+.pv-score{display:flex;align-items:center;gap:20px;background:#f4f8fc;border-radius:12px;padding:16px 20px;border:1px solid #e0eaf2;margin-top:4px}
+.pv-score-num{font-family:"Fraunces",serif;font-size:48px;font-weight:700;color:#0e8ce4;line-height:1;flex:none}
+.pv-score-info h4{font-family:"Fraunces",serif;font-size:16px;font-weight:600;margin-bottom:4px}
+.pv-score-info p{font-size:12.5px;color:#5e7184;line-height:1.5}
+.pv-verdict{display:inline-block;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-top:6px}
+.pv-grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pv-copilot{background:#e6f2fb;border:1px solid #b8d8f0;border-radius:10px;padding:14px 16px;margin-top:4px}
+.pv-copilot .cpk{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#0e8ce4;margin-bottom:6px}
+.pv-copilot p{font-size:13px;color:#0d2233;line-height:1.55}
+.pv-factors{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.pv-ftag{background:#f4f8fc;border:1px solid #e0eaf2;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:600;color:#0d2233}
+.pv-footer{margin-top:20px;padding-top:12px;border-top:1px solid #e0eaf2;display:flex;justify-content:space-between;align-items:center;font-size:10.5px;color:#90a2b3}
+
+@media (max-width:900px){
+  .grid{grid-template-columns:1fr}
+  .proj input{min-width:120px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div class="name"><b>Blue</b> <span>Frontier</span></div>
+      <span class="crumb">/ Strategy Canvas</span>
+    </div>
+    <div class="spacer"></div>
+    <div class="proj">
+      <input id="projName" value="FinTech pour seniors" aria-label="Nom du projet">
+      <span class="pill">v3</span>
+      <div class="avatars">
+        <span style="background:#0e8ce4">SR</span>
+        <span style="background:#16b6c6">KM</span>
+        <span style="background:#e8643c">AL</span>
+      </div>
+    </div>
+    <select class="btn" id="preset" title="Charger un cas réel">
+      <option value="">Charger un exemple…</option>
+      <option value="fintech">💳 FinTech seniors</option>
+      <option value="yellowtail">🍷 [yellow tail]</option>
+      <option value="cirque">🎪 Cirque du Soleil</option>
+    </select>
+    <button class="btn ghost icon" id="theme" title="Thème clair / sombre">🌙</button>
+    <button class="btn" id="exportPdf" style="border-color:#e8643c;color:#e8643c">📄 Export PDF</button>
+    <button class="btn accent" id="export">↧ Export PNG</button>
+  </header>
+
+  <!-- Main -->
+  <div class="grid">
+    <!-- CHART -->
+    <section class="card chart-card">
+      <div class="chart-head">
+        <h2>Courbe de valeur</h2>
+        <p>Glissez les points verticalement pour fixer le niveau de chaque facteur.</p>
+        <span class="hint">✱ astuce : faites diverger la courbe <b style="color:var(--accent)">&nbsp;Cible&nbsp;</b></span>
+      </div>
+      <svg class="canvas" id="svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Strategy canvas"></svg>
+    </section>
+
+    <!-- SIDEBAR -->
+    <aside class="side">
+      <div class="card panel">
+        <h3>📈 Courbes</h3>
+        <div class="series" id="seriesList"></div>
+        <button class="btn sm addseries" id="addSeries">+ Ajouter une courbe</button>
+      </div>
+
+      <div class="card panel">
+        <h3>🧭 Analyse Océan Bleu</h3>
+        <div class="meter"><i id="meterFill" style="width:0%"></i></div>
+        <div class="meter-meta">
+          <span>Indice de divergence</span>
+          <span class="verdict" id="verdict">—</span>
+        </div>
+        <div class="errc">
+          <div class="epill eli"><div class="k">Éliminer</div><div class="v" id="cEli">0</div></div>
+          <div class="epill rai"><div class="k">Augmenter</div><div class="v" id="cRai">0</div></div>
+          <div class="epill red"><div class="k">Réduire</div><div class="v" id="cRed">0</div></div>
+          <div class="epill cre"><div class="k">Créer</div><div class="v" id="cCre">0</div></div>
+        </div>
+        <div class="copilot">
+          <div class="ic">✦</div>
+          <p id="copilotMsg">Définissez une courbe au rôle <b>Cible</b> pour lancer l'analyse.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Factor editor -->
+  <section class="card factors" style="margin-top:18px">
+    <div class="lbl">Facteurs de concurrence — axe horizontal</div>
+    <div class="frow" id="factorRow"></div>
+  </section>
+</div>
+
+<div class="foot">Prototype interactif — Blue Frontier · Strategy Canvas. Les données restent en mémoire (rien n'est envoyé). Glisser-déposer des points · ERRC en direct · rôles Actuel / Concurrent / Cible.</div>
+<div class="print-view" id="printView"></div>
+<div id="tip"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Geometry ---------- */
+  const VB_W=1000, VB_H=600;
+  const PL=68, PR=964, PT=46, PB=470;      // plot bounds
+  const V_MAX=10;
+  const svg=document.getElementById('svg');
+  const SVGNS="http://www.w3.org/2000/svg";
+
+  const THEMES={
+    light:{current:'#e8643c',competitor:'#8497ab',target:'#0e8ce4',
+           grid:'#e2eaf1',zero:'#c9d6e1',ink:'#0d2233',muted:'#5e7184',faint:'#90a2b3',
+           pointStroke:'#ffffff',bg:'#ffffff'},
+    dark:{current:'#ff7a52',competitor:'#9ab0c4',target:'#2fa8ff',
+          grid:'#1a3047',zero:'#274056',ink:'#e9f2fa',muted:'#90a6ba',faint:'#5e7588',
+          pointStroke:'#0e1f31',bg:'#0a1726'}
+  };
+  let theme=THEMES.light;
+
+  /* ---------- State ---------- */
+  let uid=0; const nid=()=>'id'+(++uid);
+
+  const PRESETS={
+    fintech:{name:"FinTech pour seniors",
+      factors:["Prix","Frais de tenue","Appli mobile","Conseil humain","Sécurité anti-fraude","Simplicité d'usage","Lisibilité (gros caractères)"],
+      series:[
+        {n:"Banque classique",role:"current",   v:[8,8,4,7,6,3,3]},
+        {n:"Néobanque",       role:"competitor", v:[3,2,9,1,5,6,3]},
+        {n:"Cible (seniors)", role:"target",     v:[4,2,5,8,9,9,10]}
+      ]},
+    yellowtail:{name:"[yellow tail]",
+      factors:["Prix","Terminologie œnologique","Vieillissement","Prestige du vignoble","Complexité du vin","Gamme de vins","Facilité de consommation","Facilité de choix","Fun & aventure"],
+      series:[
+        {n:"Vins premium",     role:"current",   v:[9,8,8,9,8,8,3,2,2]},
+        {n:"Vins économiques", role:"competitor",v:[2,3,2,2,3,4,4,3,2]},
+        {n:"[yellow tail]",    role:"target",    v:[4,1,1,1,2,2,9,9,9]}
+      ]},
+    cirque:{name:"Cirque du Soleil",
+      factors:["Prix","Vedettes","Numéros animaux","Pistes multiples","Concessions","Fun & humour","Danger & sensations","Thème","Environnement raffiné","Musique & danse"],
+      series:[
+        {n:"Cirque traditionnel", role:"current",   v:[5,7,8,8,7,8,7,2,2,2]},
+        {n:"Cirques régionaux",   role:"competitor",v:[2,2,4,2,3,6,4,1,1,1]},
+        {n:"Cirque du Soleil",    role:"target",    v:[8,1,1,1,2,6,4,9,9,9]}
+      ]}
+  };
+
+  let factors=[], series=[];
+
+  function loadPreset(key){
+    const p=PRESETS[key]; if(!p) return;
+    document.getElementById('projName').value=p.name;
+    factors=p.factors.map(name=>({id:nid(),name}));
+    series=p.series.map(s=>{
+      const vals={}; factors.forEach((f,i)=>vals[f.id]=s.v[i]);
+      return {id:nid(),name:s.n,role:s.role,custom:null,visible:true,values:vals};
+    });
+    build();
+  }
+
+  /* ---------- Helpers ---------- */
+  const el=(t,a)=>{const e=document.createElementNS(SVGNS,t); if(a) for(const k in a) e.setAttribute(k,a[k]); return e;};
+  const xForIdx=(i,n)=> n<=1 ? (PL+PR)/2 : PL + i*(PR-PL)/(n-1);
+  const yForVal=v=> PB - (v/V_MAX)*(PB-PT);
+  const valForY=y=>{let v=(PB-y)/(PB-PT)*V_MAX; v=Math.round(v*2)/2; return Math.max(0,Math.min(V_MAX,v));};
+  const effColor=s=> s.custom || theme[s.role] || theme.competitor;
+
+  function wrapLabel(text,max){
+    const words=text.split(' '); const lines=[]; let cur='';
+    words.forEach(w=>{ if((cur+' '+w).trim().length<=max){cur=(cur+' '+w).trim();} else {if(cur)lines.push(cur); cur=w;} });
+    if(cur)lines.push(cur); return lines.slice(0,3);
+  }
+
+  /* ---------- Build the SVG (structural) ---------- */
+  const ptGroups={}, lineEls={};   // ptGroups[sid][fid] = <g>, lineEls[sid] = <polyline>
+
+  function build(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    for(const k in ptGroups) delete ptGroups[k];
+    for(const k in lineEls) delete lineEls[k];
+
+    // gridlines + Y labels
+    for(let v=0; v<=V_MAX; v++){
+      const y=yForVal(v);
+      svg.appendChild(el('line',{x1:PL,y1:y,x2:PR,y2:y,class:v===0?'gline zero':'gline',stroke:v===0?theme.zero:theme.grid,'stroke-width':v===0?1.5:1}));
+    }
+    // Y axis labels Bas / Élevé
+    const yhi=el('text',{x:PL-14,y:PT+4,'text-anchor':'end',class:'axislab',fill:theme.faint}); yhi.textContent='Élevé'; svg.appendChild(yhi);
+    const ylo=el('text',{x:PL-14,y:PB+4,'text-anchor':'end',class:'axislab',fill:theme.faint}); ylo.textContent='Bas'; svg.appendChild(ylo);
+    // Y title (rotated)
+    const yt=el('text',{x:22,y:(PT+PB)/2,class:'ytitle',fill:theme.muted,'text-anchor':'middle',transform:`rotate(-90 22 ${(PT+PB)/2})`}); yt.textContent="Niveau de l'offre"; svg.appendChild(yt);
+
+    const n=factors.length;
+
+    // factor labels (x axis) + vertical guide
+    factors.forEach((f,i)=>{
+      const x=xForIdx(i,n);
+      svg.appendChild(el('line',{x1:x,y1:PT,x2:x,y2:PB,stroke:theme.grid,'stroke-width':1,'stroke-dasharray':'2 5',opacity:.7}));
+      const t=el('text',{x:x,y:PB+24,'text-anchor':'middle',class:'flab',fill:theme.ink});
+      wrapLabel(f.name,15).forEach((ln,k)=>{
+        const ts=el('tspan',{x:x,dy:k===0?0:14}); ts.textContent=ln; t.appendChild(ts);
+      });
+      svg.appendChild(t);
+    });
+
+    // series: polyline first (under points)
+    series.forEach(s=>{
+      const pl=el('polyline',{fill:'none',stroke:effColor(s),'stroke-width':s.role==='target'?3.4:2.4,
+        'stroke-linejoin':'round','stroke-linecap':'round',opacity:s.visible?1:0,
+        'stroke-dasharray':s.role==='competitor'?'7 6':'none'});
+      svg.appendChild(pl); lineEls[s.id]=pl;
+    });
+    // series points (above lines)
+    series.forEach(s=>{
+      ptGroups[s.id]={};
+      factors.forEach(f=>{
+        const g=el('g',{opacity:s.visible?1:0});
+        const hit=el('circle',{r:16,class:'pt-hit'});
+        const dot=el('circle',{r:s.role==='target'?6.5:5.5,fill:theme.bg,stroke:effColor(s),'stroke-width':3});
+        g.appendChild(hit); g.appendChild(dot);
+        attachDrag(hit,s.id,f.id);
+        attachHover(hit,s.id,f.id);
+        svg.appendChild(g);
+        ptGroups[s.id][f.id]=g;
+      });
+    });
+
+    series.forEach(s=>placeSeries(s.id));
+    renderSidebar();
+    renderFactors();
+    computeInsight();
+  }
+
+  function placeSeries(sid){
+    const s=series.find(x=>x.id===sid); if(!s) return;
+    const n=factors.length; const pts=[];
+    factors.forEach((f,i)=>{
+      const x=xForIdx(i,n), y=yForVal(s.values[f.id]??5);
+      pts.push(x+','+y);
+      const g=ptGroups[sid][f.id];
+      if(g) g.setAttribute('transform',`translate(${x},${y})`);
+    });
+    if(lineEls[sid]) lineEls[sid].setAttribute('points',pts.join(' '));
+  }
+
+  /* ---------- Drag ---------- */
+  let drag=null;
+  function svgPoint(evt){
+    const p=svg.createSVGPoint(); p.x=evt.clientX; p.y=evt.clientY;
+    return p.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function attachDrag(hit,sid,fid){
+    hit.addEventListener('pointerdown',e=>{
+      e.preventDefault();
+      const s=series.find(x=>x.id===sid); if(!s||!s.visible) return;
+      drag={sid,fid}; hit.setPointerCapture(e.pointerId);
+      moveDrag(e);
+    });
+    hit.addEventListener('pointermove',e=>{ if(drag&&drag.sid===sid&&drag.fid===fid) moveDrag(e); });
+    hit.addEventListener('pointerup',e=>{ drag=null; hideTip(); try{hit.releasePointerCapture(e.pointerId);}catch(_){} });
+    hit.addEventListener('pointercancel',()=>{drag=null;hideTip();});
+  }
+  function moveDrag(e){
+    const s=series.find(x=>x.id===drag.sid); const f=factors.find(x=>x.id===drag.fid);
+    const p=svgPoint(e); const v=valForY(p.y);
+    s.values[drag.fid]=v;
+    placeSeries(drag.sid);
+    computeInsight();
+    showTip(e, f.name, v, effColor(s));
+  }
+
+  /* ---------- Hover tooltip ---------- */
+  function attachHover(hit,sid,fid){
+    hit.addEventListener('pointerenter',e=>{
+      if(drag) return;
+      const s=series.find(x=>x.id===sid); const f=factors.find(x=>x.id===fid);
+      if(s&&s.visible) showTip(e,f.name,s.values[fid],effColor(s));
+    });
+    hit.addEventListener('pointerleave',()=>{ if(!drag) hideTip(); });
+  }
+  const tip=document.getElementById('tip');
+  function showTip(e,name,val,color){
+    tip.innerHTML=name+' · <b style="color:'+color+'">'+val.toFixed(1).replace('.0','')+'</b>/10';
+    tip.style.left=e.clientX+'px'; tip.style.top=e.clientY+'px'; tip.style.opacity='1';
+  }
+  function hideTip(){ tip.style.opacity='0'; }
+
+  /* ---------- Sidebar: series ---------- */
+  const ROLE_LABELS={current:'Actuel',competitor:'Concurrent',target:'Cible'};
+  function renderSidebar(){
+    const list=document.getElementById('seriesList'); list.innerHTML='';
+    series.forEach(s=>{
+      const row=document.createElement('div'); row.className='srow'+(s.visible?'':' off');
+      const sw=document.createElement('span'); sw.className='swatch'; sw.style.background=effColor(s);
+      const eye=document.createElement('button'); eye.className='eye'; eye.textContent=s.visible?'👁':'⊘'; eye.title='Afficher / masquer';
+      eye.onclick=()=>{s.visible=!s.visible; build();};
+      const name=document.createElement('input'); name.className='sname'; name.value=s.name;
+      name.oninput=()=>{s.name=name.value;};
+      const role=document.createElement('select');
+      ['current','competitor','target'].forEach(r=>{const o=document.createElement('option');o.value=r;o.textContent=ROLE_LABELS[r];if(s.role===r)o.selected=true;role.appendChild(o);});
+      role.onchange=()=>{s.role=role.value; s.custom=null; build();};
+      const col=document.createElement('input'); col.type='color'; col.value=toHex(effColor(s)); col.title='Couleur personnalisée';
+      col.oninput=()=>{s.custom=col.value; build();};
+      const del=document.createElement('button'); del.className='del'; del.textContent='✕'; del.title='Supprimer';
+      del.onclick=()=>{ if(series.length<=1)return; series=series.filter(x=>x.id!==s.id); build(); };
+      row.append(sw,eye,name,role,col,del);
+      list.appendChild(row);
+    });
+  }
+  function toHex(c){ // resolve named/theme hex (already hex here) -> ensure #rrggbb
+    if(/^#([0-9a-f]{6})$/i.test(c)) return c;
+    const cx=document.createElement('canvas').getContext('2d'); cx.fillStyle=c; return cx.fillStyle;
+  }
+  document.getElementById('addSeries').onclick=()=>{
+    const vals={}; factors.forEach(f=>vals[f.id]=5);
+    series.push({id:nid(),name:'Nouvelle courbe',role:'competitor',custom:null,visible:true,values:vals});
+    build();
+  };
+
+  /* ---------- Factor editor ---------- */
+  function renderFactors(){
+    const row=document.getElementById('factorRow'); row.innerHTML='';
+    factors.forEach((f,i)=>{
+      const c=document.createElement('div'); c.className='fchip';
+      const inp=document.createElement('input'); inp.value=f.name;
+      inp.oninput=()=>{f.name=inp.value; rebuildLabels();};
+      const bar=document.createElement('div'); bar.className='fbar';
+      const left=document.createElement('div');
+      const lb=mini('◀','Déplacer à gauche',()=>{ if(i>0){ [factors[i-1],factors[i]]=[factors[i],factors[i-1]]; build(); }});
+      const rb=mini('▶','Déplacer à droite',()=>{ if(i<factors.length-1){ [factors[i+1],factors[i]]=[factors[i],factors[i+1]]; build(); }});
+      left.append(lb,rb);
+      const db=mini('✕','Supprimer',()=>{ if(factors.length<=2)return; const id=f.id; factors=factors.filter(x=>x.id!==id); series.forEach(s=>delete s.values[id]); build(); });
+      bar.append(left,db);
+      c.append(inp,bar); row.appendChild(c);
+    });
+    const add=document.createElement('div'); add.className='fchip add'; add.textContent='+ Facteur';
+    add.onclick=()=>{ const f={id:nid(),name:'Nouveau facteur'}; factors.push(f); series.forEach(s=>s.values[f.id]=5); build(); };
+    row.appendChild(add);
+  }
+  function mini(txt,title,fn){const b=document.createElement('button');b.className='minibtn';b.textContent=txt;b.title=title;b.onclick=fn;return b;}
+  function rebuildLabels(){ // light: just redraw labels without full rebuild
+    build();
+  }
+
+  /* ---------- Insight engine (ERRC + divergence) ---------- */
+  function computeInsight(){
+    const target=series.find(s=>s.role==='target'&&s.visible);
+    const current=series.find(s=>s.role==='current'&&s.visible);
+    let eli=0,rai=0,red=0,cre=0;
+    if(target&&current){
+      factors.forEach(f=>{
+        const t=target.values[f.id], c=current.values[f.id];
+        if(c>=6 && t<=2) eli++;
+        else if(c<=2 && t>=6) cre++;
+        else if(t-c>=1.5) rai++;
+        else if(c-t>=1.5) red++;
+      });
+    }
+    document.getElementById('cEli').textContent=eli;
+    document.getElementById('cRai').textContent=rai;
+    document.getElementById('cRed').textContent=red;
+    document.getElementById('cCre').textContent=cre;
+
+    // divergence: target vs mean of other visible series
+    let div=0, verdict='—', vColor=theme.muted;
+    const others=series.filter(s=>s!==target && s.visible);
+    if(target && others.length){
+      let sum=0,cnt=0;
+      factors.forEach(f=>{
+        const m=others.reduce((a,s)=>a+(s.values[f.id]??0),0)/others.length;
+        sum+=Math.abs((target.values[f.id]??0)-m); cnt++;
+      });
+      div=Math.round(sum/cnt/V_MAX*100);
+    }
+    document.getElementById('meterFill').style.width=div+'%';
+    if(target){
+      if(div>=50){verdict='Océan bleu';vColor=theme.target;}
+      else if(div>=25){verdict='En transition';vColor='#e8a93c';}
+      else {verdict='Océan rouge';vColor='#e8643c';}
+    }
+    const vEl=document.getElementById('verdict'); vEl.textContent=verdict; vEl.style.color=vColor;
+
+    // Co-Pilot message
+    let msg;
+    if(!target){
+      msg="Attribuez le rôle <b>Cible</b> à une courbe pour mesurer votre divergence et générer les actions ERRC.";
+    } else if(current){
+      const overlap=factors.filter(f=>Math.abs(target.values[f.id]-current.values[f.id])<1).length;
+      if(cre===0){
+        msg="Aucun facteur à <b>Créer</b> : votre cible reste dans les codes du secteur. Cherchez ce que <b>personne</b> n'offre encore.";
+      } else if(overlap>=Math.ceil(factors.length/2)){
+        msg="Votre cible recoupe <b>"+overlap+"</b> facteurs avec l'existant. Osez davantage d'écart pour quitter l'océan rouge.";
+      } else if(div>=50){
+        msg="Belle divergence ✦ Votre courbe cible sort des sentiers battus. Vérifiez que la valeur créée est <b>désirée</b> par des non-clients.";
+      } else {
+        msg="Bon début. Accentuez les facteurs à <b>Créer</b> et à <b>Éliminer</b> pour creuser l'écart concurrentiel.";
+      }
+    } else {
+      msg="Ajoutez une courbe au rôle <b>Actuel</b> (votre offre d'aujourd'hui) pour activer la lecture ERRC.";
+    }
+    document.getElementById('copilotMsg').innerHTML=msg;
+  }
+
+  /* ---------- Theme ---------- */
+  document.getElementById('theme').onclick=()=>{
+    const dark=document.documentElement.getAttribute('data-theme')==='dark';
+    document.documentElement.setAttribute('data-theme',dark?'light':'dark');
+    document.getElementById('theme').textContent=dark?'🌙':'☀️';
+    theme=dark?THEMES.light:THEMES.dark;
+    build();
+  };
+
+  /* ---------- Preset loader ---------- */
+  document.getElementById('preset').onchange=function(){ if(this.value){ loadPreset(this.value); this.value=''; } };
+
+  /* ---------- Export PNG ---------- */
+  document.getElementById('export').onclick=()=>{
+    const clone=svg.cloneNode(true);
+    clone.querySelectorAll('.pt-hit').forEach(n=>n.remove());
+    const bg=el('rect',{x:0,y:0,width:VB_W,height:VB_H,fill:theme.bg});
+    clone.insertBefore(bg,clone.firstChild);
+    clone.setAttribute('xmlns',SVGNS);
+    const data=new XMLSerializer().serializeToString(clone);
+    const svg64='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(data)));
+    const img=new Image();
+    img.onload=()=>{
+      const scale=2, cv=document.createElement('canvas');
+      cv.width=VB_W*scale; cv.height=VB_H*scale;
+      const cx=cv.getContext('2d'); cx.scale(scale,scale); cx.drawImage(img,0,0);
+      const a=document.createElement('a');
+      a.download=(document.getElementById('projName').value||'strategy-canvas').replace(/[^\w\-]+/g,'_')+'.png';
+      a.href=cv.toDataURL('image/png'); a.click();
+    };
+    img.src=svg64;
+  };
+
+  /* ---------- PDF Export ---------- */
+  document.getElementById('exportPdf').onclick=()=>{
+    // Capture SVG as data URL
+    const clone=svg.cloneNode(true);
+    clone.querySelectorAll('.pt-hit').forEach(n=>n.remove());
+    const bgRect=el('rect',{x:0,y:0,width:VB_W,height:VB_H,fill:'#ffffff'});
+    clone.insertBefore(bgRect,clone.firstChild);
+    clone.setAttribute('xmlns',SVGNS);
+    const svgData=new XMLSerializer().serializeToString(clone);
+    const svgB64='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(svgData)));
+
+    const projName=document.getElementById('projName').value||'Mon projet';
+    const now=new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+    const eli=document.getElementById('cEli').textContent;
+    const rai=document.getElementById('cRai').textContent;
+    const red=document.getElementById('cRed').textContent;
+    const cre=document.getElementById('cCre').textContent;
+    const verdictTxt=document.getElementById('verdict').textContent||'—';
+    const meterW=document.getElementById('meterFill').style.width||'0%';
+    const divScore=parseInt(meterW)||0;
+    const cpMsg=document.getElementById('copilotMsg').innerHTML||'';
+    const verdictColor=verdictTxt==='Océan bleu'?'#0e8ce4':verdictTxt==='En transition'?'#e8a93c':'#e8643c';
+    const verdictBg=verdictTxt==='Océan bleu'?'#e6f2fb':verdictTxt==='En transition'?'#fff8ed':'#fff4f2';
+
+    // Build ERRC detail lists from state (current vs target)
+    const target=series.find(s=>s.role==='target'&&s.visible);
+    const current=series.find(s=>s.role==='current'&&s.visible);
+    const errcLists={eli:[],rai:[],red:[],cre:[]};
+    if(target&&current){
+      factors.forEach(f=>{
+        const t=target.values[f.id]??0, c=current.values[f.id]??0;
+        if(c>=6&&t<=2) errcLists.eli.push(f.name);
+        else if(c<=2&&t>=6) errcLists.cre.push(f.name);
+        else if(t-c>=1.5) errcLists.rai.push(f.name);
+        else if(c-t>=1.5) errcLists.red.push(f.name);
+      });
+    }
+    const listOf=arr=>arr.length?arr.map(n=>'<span style="display:inline-block;background:#fff;border:1px solid #ddd;border-radius:5px;padding:2px 7px;margin:2px 2px 0 0;font-size:11px">'+n+'</span>').join(''):'<span style="font-size:11px;color:#90a2b3;font-style:italic">Aucun</span>';
+
+    // Legend
+    const legHTML=series.filter(s=>s.visible).map(s=>{
+      const col=effColor(s);
+      const dash=s.role==='competitor'?'border-top:3px dashed '+col+';background:none':'background:'+col;
+      return '<div class="pv-leg-item"><div class="pv-leg-dot" style="'+dash+'"></div><span>'+s.name+' <span style="color:#90a2b3;font-weight:400">('+{current:'Actuel',competitor:'Concurrent',target:'Cible'}[s.role]+')</span></span></div>';
+    }).join('');
+
+    // Factor tags
+    const factorHTML=factors.map(f=>'<span class="pv-ftag">'+f.name+'</span>').join('');
+
+    const pv=document.getElementById('printView');
+    pv.innerHTML=`
+<div class="pv-page">
+  <div class="pv-head">
+    <div class="pv-brand">
+      <div class="pv-logo"></div>
+      <div class="pv-title"><b>Blue</b> <span>Frontier</span> · Strategy Canvas</div>
+    </div>
+    <div class="pv-meta"><b>${projName}</b>Généré le ${now}</div>
+  </div>
+
+  <div class="pv-section">📊 Courbe de valeur — Strategy Canvas</div>
+  <div class="pv-canvas-wrap">
+    <img src="${svgB64}" alt="Strategy Canvas" style="max-width:100%;max-height:340px">
+  </div>
+  <div class="pv-legend">${legHTML}</div>
+
+  <div class="pv-section" style="margin-top:16px">⟳ Facteurs de concurrence</div>
+  <div class="pv-factors">${factorHTML}</div>
+
+  <div class="pv-footer">
+    <span>Blue Frontier — Stratégie Océan Bleu · Kim & Mauborgne</span>
+    <span>Page 1 / 2</span>
+  </div>
+</div>
+
+<div class="pv-page">
+  <div class="pv-head">
+    <div class="pv-brand">
+      <div class="pv-logo"></div>
+      <div class="pv-title"><b>Blue</b> <span>Frontier</span> · Analyse ERRC & Score</div>
+    </div>
+    <div class="pv-meta"><b>${projName}</b>Généré le ${now}</div>
+  </div>
+
+  <div class="pv-grid2">
+    <div>
+      <div class="pv-section">📋 Grille ERRC</div>
+      <div class="pv-errc">
+        <div class="pv-eq eli">
+          <div class="ek">Éliminer</div>
+          <div class="ev">${eli}</div>
+          <div class="edet">${listOf(errcLists.eli)}</div>
+        </div>
+        <div class="pv-eq rai">
+          <div class="ek">Augmenter</div>
+          <div class="ev">${rai}</div>
+          <div class="edet">${listOf(errcLists.rai)}</div>
+        </div>
+        <div class="pv-eq red">
+          <div class="ek">Réduire</div>
+          <div class="ev">${red}</div>
+          <div class="edet">${listOf(errcLists.red)}</div>
+        </div>
+        <div class="pv-eq cre">
+          <div class="ek">Créer</div>
+          <div class="ev">${cre}</div>
+          <div class="edet">${listOf(errcLists.cre)}</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="pv-section">🎯 Indice de divergence</div>
+      <div class="pv-score">
+        <div class="pv-score-num">${divScore}</div>
+        <div class="pv-score-info">
+          <h4>/ 100</h4>
+          <p>Mesure l'écart entre votre courbe cible et les courbes concurrentes. Plus l'indice est élevé, plus votre stratégie diverge des normes du secteur.</p>
+          <span class="pv-verdict" style="color:${verdictColor};background:${verdictBg}">${verdictTxt}</span>
+        </div>
+      </div>
+      <div class="pv-section">✦ Recommandation Co-Pilot</div>
+      <div class="pv-copilot">
+        <div class="cpk">Analyse Blue Frontier</div>
+        <p>${cpMsg}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pv-footer">
+    <span>Blue Frontier — Stratégie Océan Bleu · Kim & Mauborgne</span>
+    <span>Page 2 / 2</span>
+  </div>
+</div>`;
+
+    setTimeout(()=>{ window.print(); },120);
+  };
+
+  /* ---------- Init ---------- */
+  loadPreset('fintech');
+})();
+</script>
+</body>
+</html>

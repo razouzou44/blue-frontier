@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blue Frontier — Suite Avancée</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<style>
+:root{
+  --bg:#e9eef3;--bg2:#dfe8f0;--panel:#fff;--panel2:#f4f8fc;
+  --ink:#0d2233;--muted:#5e7184;--faint:#90a2b3;--line:#e0eaf2;--hair:#d0dde8;
+  --accent:#0e8ce4;--accent2:#16b6c6;--accent-s:#e6f2fb;
+  --eli:#e8643c;--eli-s:#fff4f2;--redq:#e8a93c;--redq-s:#fff8ed;
+  --rai:#16b6c6;--rai-s:#e8f8f5;--cre:#0e8ce4;--cre-s:#e6f2fb;
+  --shadow:0 1px 3px rgba(13,34,51,.06),0 10px 28px -10px rgba(13,34,51,.18);
+  --r:16px;
+}
+html[data-theme="dark"]{
+  --bg:#06101c;--bg2:#0a1726;--panel:#0e1f31;--panel2:#11253a;
+  --ink:#e9f2fa;--muted:#8aa4ba;--faint:#4e6678;--line:#1a3047;--hair:#22394f;
+  --accent:#2fa8ff;--accent2:#38e0d0;--accent-s:#0f2b42;
+  --eli:#ff7a52;--eli-s:#2a1008;--redq:#f5b84a;--redq-s:#2a1f08;
+  --rai:#38e0d0;--rai-s:#082a28;--cre:#2fa8ff;--cre-s:#082542;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 10px 28px -10px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100vh}
+body{font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--ink);
+  background:radial-gradient(900px 500px at 85% -5%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 60%),
+  radial-gradient(700px 500px at -5% 110%,color-mix(in srgb,var(--accent2) 12%,transparent),transparent 55%),
+  linear-gradient(155deg,var(--bg),var(--bg2));background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;padding-bottom:60px}
+.wrap{max-width:1200px;margin:0 auto;padding:18px 20px 0}
+nav{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo{width:32px;height:32px;border-radius:9px;flex:none;position:relative;
+  background:linear-gradient(145deg,var(--accent),var(--accent2));box-shadow:0 5px 14px -5px var(--accent)}
+.logo::before{content:"";position:absolute;inset:7px 6px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.88);border-top-color:transparent;transform:rotate(-20deg)}
+.bn{font-family:"Fraunces",serif;font-size:19px;font-weight:600}
+.bn em{color:var(--accent);font-style:normal}
+.crumb{color:var(--faint);font-size:13px}
+.sp{flex:1}
+.pill{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:999px;background:var(--accent-s);color:var(--accent)}
+.btn{font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;background:var(--panel);
+  border:1.5px solid var(--hair);border-radius:11px;padding:9px 16px;color:var(--ink);
+  display:inline-flex;align-items:center;gap:7px;transition:.15s;box-shadow:var(--shadow)}
+.btn:hover{transform:translateY(-1px);border-color:var(--accent)}
+.btn.ghost{background:transparent;box-shadow:none;border-color:transparent}
+.btn.icon{padding:9px;width:38px;justify-content:center}
+.btn.primary{background:linear-gradient(140deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 6px 20px -8px var(--accent)}
+.tabs{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:6px;box-shadow:var(--shadow);flex-wrap:wrap;margin-bottom:20px}
+.tab{font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;background:transparent;
+  border:0;color:var(--muted);padding:10px 16px;border-radius:11px;display:flex;align-items:center;gap:8px;transition:.18s;white-space:nowrap}
+.tab:hover{background:var(--panel2);color:var(--ink)}
+.tab.active{background:linear-gradient(145deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 14px -6px var(--accent)}
+.pane{display:none}.pane.active{display:block}
+.pane-head{margin-bottom:20px}
+.pane-head h2{font-family:"Fraunces",serif;font-size:24px;font-weight:600;margin-bottom:6px}
+.pane-head p{color:var(--muted);font-size:14px;line-height:1.55;max-width:620px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+/* ERRC */
+.errc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:900px){.errc-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.errc-grid{grid-template-columns:1fr}}
+.eq-col{background:var(--panel);border:1.5px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.eq-header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.eq-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:17px;flex:none;color:#fff}
+.eq-name{font-family:"Fraunces",serif;font-size:15px;font-weight:600}
+.eq-desc{font-size:11px;color:var(--muted);margin-top:1px}
+.eq-count{margin-left:auto;font-family:"Fraunces",serif;font-size:22px;font-weight:700;flex:none}
+.eq-cards{flex:1;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:150px}
+.eq-card{display:flex;flex-direction:column;gap:5px;background:var(--panel2);border:1.5px solid var(--line);border-radius:11px;padding:10px 12px}
+.eq-card input{font:inherit;font-size:13px;font-weight:700;color:var(--ink);background:transparent;border:0;padding:0}
+.eq-card input:focus{outline:0}
+.eq-card textarea{font:inherit;font-size:12px;color:var(--muted);background:transparent;border:0;resize:none;min-height:38px;line-height:1.4}
+.eq-card textarea:focus{outline:0}
+.eq-card-bar{display:flex;justify-content:flex-end}
+.eq-del{border:0;background:transparent;color:var(--faint);cursor:pointer;font-size:13px;padding:2px 4px;border-radius:6px}
+.eq-del:hover{color:var(--eli);background:var(--eli-s)}
+.eq-add{margin:0 12px 12px;border:1.5px dashed var(--hair);background:transparent;color:var(--muted);
+  border-radius:10px;padding:8px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;transition:.15s}
+.eq-add:hover{border-color:var(--accent);color:var(--accent)}
+.copilot-bar{display:flex;gap:10px;background:var(--accent-s);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);
+  border-radius:13px;padding:13px 16px;margin-top:18px;align-items:flex-start}
+.cp-ic{width:28px;height:28px;border-radius:8px;flex:none;background:linear-gradient(145deg,var(--accent),var(--accent2));color:#fff;display:grid;place-items:center;font-size:15px}
+.cp-msg{font-size:13px;line-height:1.5;color:var(--ink)}
+.cp-msg b{color:var(--accent)}
+
+/* IDEA INDEX */
+.ii-layout{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start}
+@media(max-width:800px){.ii-layout{grid-template-columns:1fr}}
+.radar-card{padding:20px;text-align:center}
+.radar-card h3{font-family:"Fraunces",serif;font-size:16px;font-weight:600;margin-bottom:14px}
+.score-big{font-family:"Fraunces",serif;font-size:60px;font-weight:700;line-height:1;margin:10px 0 4px}
+.score-verdict{font-size:13px;font-weight:700;display:inline-block;padding:4px 14px;border-radius:999px;margin-bottom:12px}
+.pillars{display:flex;flex-direction:column;gap:12px}
+.pillar{background:var(--panel);border:1.5px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.pillar-head{display:flex;align-items:center;gap:11px;padding:14px 16px;cursor:pointer;transition:.15s}
+.pillar-head:hover{background:var(--panel2)}
+.pi-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:18px;flex:none}
+.pi-name{font-family:"Fraunces",serif;font-size:14px;font-weight:600;flex:1}
+.pi-score{font-family:"Fraunces",serif;font-size:19px;font-weight:700}
+.pi-bar{height:5px;background:var(--line);border-radius:999px;overflow:hidden;width:70px;margin-top:4px}
+.pi-fill{height:100%;border-radius:999px;transition:width .4s ease}
+.pi-chev{color:var(--faint);font-size:11px;transition:.2s}
+.pillar.open .pi-chev{transform:rotate(180deg)}
+.pillar-body{display:none;padding:0 16px 14px;border-top:1px solid var(--line)}
+.pillar.open .pillar-body{display:block}
+.pillar-wt{font-size:11px;color:var(--faint);font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin:10px 0 8px}
+.questions{display:flex;flex-direction:column;gap:7px}
+.q-row{display:flex;gap:11px;align-items:flex-start;padding:9px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--panel2);cursor:pointer;transition:.15s}
+.q-row:hover{border-color:var(--accent)}
+.q-row.checked{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--panel))}
+.q-check{width:21px;height:21px;border-radius:7px;border:2px solid var(--hair);flex:none;display:grid;place-items:center;font-size:12px;transition:.2s;margin-top:1px}
+.q-row.checked .q-check{background:var(--accent);border-color:var(--accent);color:#fff}
+.q-text{font-size:13px;color:var(--ink);line-height:1.45;flex:1}
+
+/* BUYER UTILITY MAP */
+.bum-wrap{overflow-x:auto;padding-bottom:8px}
+.bum-table{border-collapse:collapse;min-width:700px;width:100%}
+.bum-table th,.bum-table td{border:1px solid var(--line);padding:0}
+.bum-col-head{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:12px;font-weight:800;padding:10px 8px;text-align:center;white-space:nowrap}
+.bum-col-head:first-child{background:transparent;color:var(--muted);font-size:11px;text-align:left;padding-left:12px;min-width:120px}
+.bum-row-head{font-size:12px;font-weight:700;color:var(--muted);padding:10px 12px;text-align:left;background:var(--panel2);white-space:nowrap}
+.bum-cell{text-align:center;cursor:pointer;transition:.15s;height:52px;vertical-align:middle}
+.bum-cell:hover{opacity:.8}
+.bum-cell-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;height:52px;gap:2px;padding:4px}
+.bum-cell-inner .ci{font-size:16px;line-height:1}
+.bum-cell-inner .cl{font-size:9.5px;font-weight:700}
+.bum-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.bl-item{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--muted)}
+.bl-dot{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:13px;border:1px solid var(--line)}
+.bum-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.bs{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.bs .bsv{font-family:"Fraunces",serif;font-size:28px;font-weight:700}
+.bs .bsk{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--faint);margin-top:3px}
+
+/* PPT */
+.ppt-layout{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+@media(max-width:800px){.ppt-layout{grid-template-columns:1fr}}
+.slide-previews{display:flex;flex-direction:column;gap:10px}
+.slide-row{display:flex;gap:13px;align-items:center;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:13px;box-shadow:var(--shadow);transition:.2s}
+.slide-row.off{opacity:.4}
+.slide-thumb{width:82px;height:52px;border-radius:8px;flex:none;overflow:hidden;border:1px solid var(--line)}
+.slide-thumb svg{width:100%;height:100%;display:block}
+.slide-info{flex:1}
+.slide-num{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--faint);margin-bottom:2px}
+.slide-title{font-family:"Fraunces",serif;font-size:14px;font-weight:600;margin-bottom:2px}
+.slide-desc{font-size:12px;color:var(--muted);line-height:1.4}
+.slide-chk{width:24px;height:24px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;font-size:13px;cursor:pointer;flex:none;transition:.2s}
+.slide-chk.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.ppt-cfg{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
+.ppt-cfg h3{font-family:"Fraunces",serif;font-size:16px;font-weight:600;margin-bottom:14px}
+.ppt-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.ppt-field label{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--faint)}
+.ppt-field input{font:inherit;font-size:14px;font-weight:600;color:var(--ink);background:var(--panel2);border:1.5px solid var(--line);border-radius:10px;padding:10px 13px;transition:.15s}
+.ppt-field input:focus{outline:0;border-color:var(--accent);background:var(--panel)}
+.gen-btn{width:100%;padding:14px;font-size:15px;font-weight:800;justify-content:center;margin-top:4px;border-radius:13px;border:0}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px -8px var(--accent)}
+.ppt-note{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <a href="index.html" class="brand"><div class="logo"></div><span class="bn"><b>Blue</b> <em>Frontier</em></span></a>
+  <span class="crumb">/ Suite Avancée</span>
+  <div class="sp"></div>
+  <span class="pill">Outils Pro</span>
+  <button class="btn ghost icon" id="themeBtn">🌙</button>
+</nav>
+
+<div class="tabs">
+  <button class="tab active" data-tab="errc">📋 Grille ERRC</button>
+  <button class="tab" data-tab="ii">🏆 Idea Index</button>
+  <button class="tab" data-tab="bum">🗺️ Carte d'Utilité</button>
+  <button class="tab" data-tab="ppt">📊 Export PowerPoint</button>
+</div>
+
+<!-- ERRC -->
+<div class="pane active" id="pane-errc">
+  <div class="pane-head"><h2>Grille ERRC</h2><p>Les quatre actions stratégiques qui dessinent votre courbe de valeur Océan Bleu.</p></div>
+  <div class="errc-grid" id="errcGrid"></div>
+  <div class="copilot-bar"><div class="cp-ic">✦</div><p class="cp-msg" id="errcMsg">Remplissez les 4 quadrants. La clé : avoir au moins un facteur dans <b>Éliminer</b> et dans <b>Créer</b>.</p></div>
+</div>
+
+<!-- IDEA INDEX -->
+<div class="pane" id="pane-ii">
+  <div class="pane-head"><h2>Blue Ocean Idea Index</h2><p>Évaluez la viabilité de votre idée sur les 4 piliers de l'innovation de valeur.</p></div>
+  <div class="ii-layout">
+    <div class="card radar-card">
+      <h3>Score global</h3>
+      <svg viewBox="0 0 280 280" id="radarSvg" style="max-width:240px;margin:0 auto;display:block"></svg>
+      <div class="score-big" id="globalScore">0</div>
+      <div class="score-verdict" id="globalVerdict">— Non évalué</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.45;max-width:220px;margin:0 auto">Cochez les questions à droite pour calculer votre indice.</p>
+    </div>
+    <div class="pillars" id="pillarsList"></div>
+  </div>
+</div>
+
+<!-- BUYER UTILITY MAP -->
+<div class="pane" id="pane-bum">
+  <div class="pane-head"><h2>Carte d'Utilité Acheteur</h2><p>Repérez douleurs, opportunités et forces sur les 36 cases du cycle d'expérience acheteur × leviers d'utilité.</p></div>
+  <div class="card" style="padding:18px">
+    <div class="bum-wrap"><table class="bum-table" id="bumTable"></table></div>
+    <div class="bum-legend">
+      <span style="font-size:12px;font-weight:700;color:var(--faint)">Cliquer pour marquer :</span>
+      <div class="bl-item"><div class="bl-dot" style="background:#fff4f2">❗</div>Point de douleur</div>
+      <div class="bl-item"><div class="bl-dot" style="background:#e6f2fb">💡</div>Opportunité</div>
+      <div class="bl-item"><div class="bl-dot" style="background:#e8f8f5">✅</div>Point fort</div>
+      <div class="bl-item"><div class="bl-dot">○</div>Vide</div>
+    </div>
+    <div class="bum-stats" id="bumStats"></div>
+  </div>
+  <div class="copilot-bar" style="margin-top:18px"><div class="cp-ic">✦</div><p class="cp-msg" id="bumMsg">Repérez les cases <b>Opportunité</b> dans les étapes peu investies par l'industrie — ce sont vos futurs avantages Océan Bleu.</p></div>
+</div>
+
+<!-- EXPORT PPT -->
+<div class="pane" id="pane-ppt">
+  <div class="pane-head"><h2>Export PowerPoint</h2><p>Générez un pitch deck professionnel Blue Frontier prêt à présenter en un clic.</p></div>
+  <div class="ppt-layout">
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--faint);margin-bottom:12px">Slides incluses</div>
+      <div class="slide-previews" id="slidePreviews"></div>
+    </div>
+    <div class="ppt-cfg">
+      <h3>Configuration</h3>
+      <div class="ppt-field"><label>Nom du projet</label><input id="pptProject" value="Mon Projet Ocean Bleu"></div>
+      <div class="ppt-field"><label>Organisation</label><input id="pptOrg" value="Blue Frontier"></div>
+      <button class="btn primary gen-btn" id="genPpt">📊 Generer le PPTX</button>
+      <p class="ppt-note">Fichier genere dans votre navigateur. Aucune donnee envoyee.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){"use strict";
+var uid=0; function nid(){return "n"+(++uid);}
+
+var QUADRANTS=[
+  {id:"eli",label:"Eliminer",desc:"Quels facteurs supprimer ?",icon:"X",col:"#e8643c",bg:"#fff4f2"},
+  {id:"redq",label:"Reduire",desc:"En dessous du standard ?",icon:"v",col:"#e8a93c",bg:"#fff8ed"},
+  {id:"rai",label:"Augmenter",desc:"Au-dessus du standard ?",icon:"^",col:"#16b6c6",bg:"#e8f8f5"},
+  {id:"cre",label:"Creer",desc:"Ce qui n'existe pas encore ?",icon:"*",col:"#0e8ce4",bg:"#e6f2fb"}
+];
+var errc={eli:[],redq:[],rai:[],cre:[]};
+
+var PILLARS=[
+  {id:"utilite",label:"Utilite exceptionnelle",icon:"STAR",w:30,color:"#0e8ce4",
+   qs:["Votre offre resout-elle un probleme reel que l'industrie n'a pas resolu ?",
+       "Cree-t-elle une experience radicalement differente sur au moins un levier d'utilite ?",
+       "Des non-clients pourraient-ils l'adopter sans formation particuliere ?"]},
+  {id:"prix",label:"Prix accessible",icon:"EUR",w:20,color:"#16b6c6",
+   qs:["Votre prix cible est-il accessible a la masse des acheteurs potentiels ?",
+       "Est-il inferieur au prix moyen des alternatives existantes ?",
+       "Des non-clients peuvent-ils se le permettre sans effort financier exceptionnel ?"]},
+  {id:"cout",label:"Cout cible atteignable",icon:"COG",w:25,color:"#e8a93c",
+   qs:["Avez-vous elimine les activites non creatrices de valeur pour l'acheteur ?",
+       "Votre structure de cout permet-elle d'atteindre le prix cible avec une marge acceptable ?",
+       "Avez-vous explore des partenariats ou innovations de processus pour reduire les couts ?"]},
+  {id:"adoption",label:"Adoption sans friction",icon:"UP",w:25,color:"#e8643c",
+   qs:["Les equipes et partenaires internes soutiennent-ils le mouvement strategique ?",
+       "Avez-vous identifie et leve les obstacles a l'adoption par les utilisateurs finaux ?",
+       "Les parties prenantes externes (reglementation, distribution) sont-elles alignees ?"]}
+];
+var ideaState={};
+PILLARS.forEach(function(p){ideaState[p.id]=[false,false,false];});
+
+var STAGES=["Achat","Livraison","Utilisation","Complements","Maintenance","Elimination"];
+var LEVERS=["Productivite","Simplicite","Commodite","Reduction du risque","Fun & image","Environnement"];
+var CYCLE=["empty","pain","opportunity","strength"];
+var CELL={
+  empty:{icon:"",label:"",color:"transparent",bg:"transparent"},
+  pain:{icon:"!",label:"Douleur",color:"#e8643c",bg:"#fff4f2"},
+  opportunity:{icon:"*",label:"Opportunite",color:"#0e8ce4",bg:"#e6f2fb"},
+  strength:{icon:"v",label:"Force",color:"#16b6c6",bg:"#e8f8f5"}
+};
+var bumState={};
+LEVERS.forEach(function(_,r){STAGES.forEach(function(_,c){bumState[r+"-"+c]="empty";});});
+var slideInc={cover:true,errc:true,ii:true,bum:true,insights:true};
+
+/* Tabs */
+document.querySelectorAll(".tab").forEach(function(t){
+  t.addEventListener("click",function(){
+    document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active");});
+    document.querySelectorAll(".pane").forEach(function(x){x.classList.remove("active");});
+    t.classList.add("active");
+    document.getElementById("pane-"+t.dataset.tab).classList.add("active");
+  });
+});
+
+/* ---- ERRC ---- */
+function renderERRC(){
+  var grid=document.getElementById("errcGrid"); grid.innerHTML="";
+  QUADRANTS.forEach(function(q){
+    var cards=errc[q.id];
+    var col=document.createElement("div"); col.className="eq-col";
+    var hdr=document.createElement("div"); hdr.className="eq-header";
+    hdr.innerHTML='<div class="eq-icon" style="background:'+q.col+'">'+q.icon+'</div>'+
+      '<div><div class="eq-name" style="color:'+q.col+'">'+q.label+'</div><div class="eq-desc">'+q.desc+'</div></div>'+
+      '<span class="eq-count" style="color:'+q.col+'">'+cards.length+'</span>';
+    col.appendChild(hdr);
+    var cardsDiv=document.createElement("div"); cardsDiv.className="eq-cards";
+    cards.forEach(function(card,i){
+      var c=document.createElement("div"); c.className="eq-card";
+      c.style.borderColor=q.col+"44";
+      var inp=document.createElement("input"); inp.value=card.name; inp.placeholder="Facteur...";
+      inp.oninput=function(){card.name=inp.value; computeERRCInsight();};
+      var ta=document.createElement("textarea"); ta.value=card.desc; ta.placeholder="Description (optionnel)";
+      ta.rows=2; ta.oninput=function(){card.desc=ta.value;};
+      var bar=document.createElement("div"); bar.className="eq-card-bar";
+      var del=document.createElement("button"); del.className="eq-del"; del.textContent="x";
+      del.onclick=function(){errc[q.id].splice(i,1); renderERRC();};
+      bar.appendChild(del); c.append(inp,ta,bar); cardsDiv.appendChild(c);
+    });
+    col.appendChild(cardsDiv);
+    var add=document.createElement("button"); add.className="eq-add"; add.textContent="+ Ajouter";
+    add.onclick=function(){errc[q.id].push({id:nid(),name:"",desc:""}); renderERRC();};
+    col.appendChild(add);
+    grid.appendChild(col);
+  });
+  computeERRCInsight();
+}
+function computeERRCInsight(){
+  var hasEli=errc.eli.some(function(c){return c.name.trim();});
+  var hasCre=errc.cre.some(function(c){return c.name.trim();});
+  var total=Object.values(errc).reduce(function(a,arr){return a+arr.filter(function(c){return c.name.trim();}).length;},0);
+  var msg;
+  if(total===0) msg="Remplissez les 4 quadrants. La cle : avoir au moins un facteur dans <b>Eliminer</b> et dans <b>Creer</b>.";
+  else if(!hasEli) msg="Le quadrant <b>Eliminer</b> est vide. Qu'est-ce que l'industrie fait par habitude sans creer de valeur ?";
+  else if(!hasCre) msg="Le quadrant <b>Creer</b> est vide. Quelle valeur entierement nouvelle pourriez-vous introduire ?";
+  else msg="Les 4 quadrants sont actifs. Verifiez que vos actions ERRC se refletent dans votre <b>Strategy Canvas</b>.";
+  document.getElementById("errcMsg").innerHTML=msg;
+}
+renderERRC();
+
+/* ---- IDEA INDEX ---- */
+function pillarScore(pid){
+  return Math.round(ideaState[pid].filter(Boolean).length/3*100);
+}
+function getGlobal(){
+  return Math.round(PILLARS.reduce(function(a,p){return a+pillarScore(p.id)*p.w/100;},0));
+}
+function drawRadar(){
+  var svg=document.getElementById("radarSvg"); svg.innerHTML="";
+  var ns="http://www.w3.org/2000/svg";
+  var cx=140,cy=140,maxR=105;
+  function mk(t,a){var e=document.createElementNS(ns,t); for(var k in a) e.setAttribute(k,a[k]); return e;}
+  [25,50,75,100].forEach(function(pct){
+    var r=maxR*pct/100;
+    svg.appendChild(mk("polygon",{points:cx+","+(cy-r)+" "+(cx+r)+","+cy+" "+cx+","+(cy+r)+" "+(cx-r)+","+cy,fill:"none",stroke:"var(--line)","stroke-width":1}));
+  });
+  [[cx,cy-maxR],[cx+maxR,cy],[cx,cy+maxR],[cx-maxR,cy]].forEach(function(pt){
+    svg.appendChild(mk("line",{x1:cx,y1:cy,x2:pt[0],y2:pt[1],stroke:"var(--hair)","stroke-width":1}));
+  });
+  var scores=PILLARS.map(function(p){return pillarScore(p.id)/100;});
+  var pts=cx+","+(cy-maxR*scores[0])+" "+(cx+maxR*scores[1])+","+cy+" "+cx+","+(cy+maxR*scores[2])+" "+(cx-maxR*scores[3])+","+cy;
+  svg.appendChild(mk("polygon",{points:pts,fill:"rgba(14,140,228,.2)",stroke:"#0e8ce4","stroke-width":2.5}));
+  [[cx,cy-maxR*scores[0],"#0e8ce4"],[cx+maxR*scores[1],cy,"#16b6c6"],[cx,cy+maxR*scores[2],"#e8a93c"],[cx-maxR*scores[3],cy,"#e8643c"]].forEach(function(d){
+    svg.appendChild(mk("circle",{cx:d[0],cy:d[1],r:5,fill:d[2],stroke:"white","stroke-width":2}));
+  });
+  var labs=[["Utilite",cx,cy-maxR-12,"middle"],["Prix",cx+maxR+14,cy+4,"start"],["Cout",cx,cy+maxR+16,"middle"],["Adoption",cx-maxR-14,cy+4,"end"]];
+  labs.forEach(function(l){
+    var t=mk("text",{x:l[1],y:l[2],"text-anchor":l[3],"font-size":11,"font-weight":700,fill:"var(--muted)","font-family":"Hanken Grotesk,sans-serif"});
+    t.textContent=l[0]; svg.appendChild(t);
+  });
+}
+function renderScore(){
+  var gs=getGlobal();
+  var scEl=document.getElementById("globalScore"); scEl.textContent=gs;
+  scEl.style.color=gs>=65?"#0e8ce4":gs>=40?"#e8a93c":"#e8643c";
+  var vEl=document.getElementById("globalVerdict");
+  if(gs>=65){vEl.textContent="Ocean Bleu";vEl.style.background="#e6f2fb";vEl.style.color="#0e8ce4";}
+  else if(gs>=40){vEl.textContent="En transition";vEl.style.background="#fff8ed";vEl.style.color="#e8a93c";}
+  else{vEl.textContent="Ocean Rouge";vEl.style.background="#fff4f2";vEl.style.color="#e8643c";}
+}
+function renderPillars(){
+  var list=document.getElementById("pillarsList"); list.innerHTML="";
+  PILLARS.forEach(function(p){
+    var sc=pillarScore(p.id);
+    var div=document.createElement("div"); div.className="pillar";
+    var head=document.createElement("div"); head.className="pillar-head";
+    head.innerHTML='<div class="pi-icon" style="background:'+p.color+'22;font-size:16px">'+
+      (p.id==="utilite"?"★":p.id==="prix"?"€":p.id==="cout"?"⚙":"↑")+'</div>'+
+      '<div class="pi-name">'+p.label+'</div>'+
+      '<div style="text-align:right;margin-right:8px"><div class="pi-score" style="color:'+p.color+'">'+sc+'</div>'+
+      '<div class="pi-bar"><div class="pi-fill" style="width:'+sc+'%;background:'+p.color+'"></div></div></div>'+
+      '<div class="pi-chev">▼</div>';
+    head.onclick=function(){div.classList.toggle("open");};
+    var body=document.createElement("div"); body.className="pillar-body";
+    var wt=document.createElement("div"); wt.className="pillar-wt"; wt.textContent="Poids : "+p.w+" %";
+    var qs=document.createElement("div"); qs.className="questions";
+    p.qs.forEach(function(q,i){
+      var row=document.createElement("div"); row.className="q-row"+(ideaState[p.id][i]?" checked":"");
+      row.innerHTML='<div class="q-check">'+(ideaState[p.id][i]?"✓":"")+'</div><div class="q-text">'+q+'</div>';
+      row.onclick=function(){ideaState[p.id][i]=!ideaState[p.id][i]; renderPillars(); renderScore(); drawRadar();};
+      qs.appendChild(row);
+    });
+    body.append(wt,qs); div.append(head,body); list.appendChild(div);
+  });
+}
+renderPillars(); renderScore(); drawRadar();
+
+/* ---- BUM ---- */
+function renderBUM(){
+  var tbl=document.getElementById("bumTable"); tbl.innerHTML="";
+  var hrow=document.createElement("tr");
+  var th0=document.createElement("th"); th0.className="bum-col-head"; th0.textContent="Leviers \\ Etapes"; hrow.appendChild(th0);
+  STAGES.forEach(function(s){var th=document.createElement("th"); th.className="bum-col-head"; th.textContent=s; hrow.appendChild(th);});
+  tbl.appendChild(hrow);
+  LEVERS.forEach(function(lev,r){
+    var row=document.createElement("tr");
+    var rh=document.createElement("td"); rh.className="bum-row-head"; rh.textContent=lev; row.appendChild(rh);
+    STAGES.forEach(function(_,c){
+      var key=r+"-"+c; var st=bumState[key]; var meta=CELL[st];
+      var td=document.createElement("td"); td.className="bum-cell"; td.style.background=meta.bg;
+      var icons={empty:"·",pain:"❗",opportunity:"💡",strength:"✅"};
+      var colors={empty:"var(--faint)",pain:"#e8643c",opportunity:"#0e8ce4",strength:"#16b6c6"};
+      td.innerHTML='<div class="bum-cell-inner"><span class="ci" style="color:'+colors[st]+'">'+icons[st]+'</span>'+(st!=="empty"?'<div class="cl" style="color:'+meta.color+'">'+meta.label+'</div>':'')+'</div>';
+      td.onclick=function(){var idx=CYCLE.indexOf(st); bumState[key]=CYCLE[(idx+1)%4]; renderBUM(); computeBUMInsight();};
+      row.appendChild(td);
+    });
+    tbl.appendChild(row);
+  });
+  var vals=Object.values(bumState);
+  var pain=vals.filter(function(v){return v==="pain";}).length;
+  var opp=vals.filter(function(v){return v==="opportunity";}).length;
+  var str=vals.filter(function(v){return v==="strength";}).length;
+  var stats=document.getElementById("bumStats"); stats.innerHTML="";
+  [{v:pain,k:"Points de douleur",c:"#e8643c"},{v:opp,k:"Opportunites",c:"#0e8ce4"},{v:str,k:"Points forts",c:"#16b6c6"}].forEach(function(s){
+    var card=document.createElement("div"); card.className="bs";
+    card.innerHTML='<div class="bsv" style="color:'+s.c+'">'+s.v+'</div><div class="bsk">'+s.k+'</div>';
+    stats.appendChild(card);
+  });
+  computeBUMInsight();
+}
+function computeBUMInsight(){
+  var vals=Object.values(bumState);
+  var pain=vals.filter(function(v){return v==="pain";}).length;
+  var opp=vals.filter(function(v){return v==="opportunity";}).length;
+  var msg;
+  if(pain+opp===0) msg="Repérez les cases <b>Opportunite</b> dans les etapes peu investies — ce sont vos futurs avantages Ocean Bleu.";
+  else if(opp===0) msg="Douleurs identifiees sans opportunites. Cherchez dans quelles etapes l'industrie n'investit pas du tout.";
+  else if(opp>=5) msg="Nombreuses opportunites ✦ Priorisez celles aux etapes <b>Utilisation</b> et <b>Maintenance</b> — souvent sous-exploitees.";
+  else msg="Bonne carte ! Transferez les opportunites les plus prometteuses dans votre <b>grille ERRC</b> comme facteurs a Creer.";
+  document.getElementById("bumMsg").innerHTML=msg;
+}
+renderBUM();
+
+/* ---- SLIDE PREVIEWS ---- */
+var SLIDES_DEF=[
+  {id:"cover",title:"Couverture",desc:"Branding Blue Frontier, projet, date"},
+  {id:"errc",title:"Grille ERRC",desc:"Les 4 quadrants avec les facteurs"},
+  {id:"ii",title:"Blue Ocean Idea Index",desc:"Score global et 4 piliers"},
+  {id:"bum",title:"Carte d'Utilite Acheteur",desc:"Grille 6x6 complete"},
+  {id:"insights",title:"Recommandations",desc:"Synthese et prochaines etapes"}
+];
+function thumbSVG(id){
+  var ns="http://www.w3.org/2000/svg";
+  var s=document.createElementNS(ns,"svg"); s.setAttribute("viewBox","0 0 82 52");
+  function r(x,y,w,h,fill,rx){var el=document.createElementNS(ns,"rect"); [["x",x],["y",y],["width",w],["height",h],["fill",fill],["rx",rx||0]].forEach(function(a){el.setAttribute(a[0],a[1]);}); s.appendChild(el);}
+  function t(text,x,y,sz,fill){var el=document.createElementNS(ns,"text"); [["x",x],["y",y],["font-size",sz],["fill",fill],["text-anchor","middle"],["font-family","Hanken Grotesk,sans-serif"],["font-weight","700"]].forEach(function(a){el.setAttribute(a[0],a[1]);}); el.textContent=text; s.appendChild(el);}
+  r(0,0,82,52,"#0a1726");
+  if(id==="cover"){r(0,0,3,52,"#0e8ce4"); t("BLUE FRONTIER",42,24,8,"#2fa8ff"); t("Rapport Ocean Bleu",42,36,6,"#8aa4ba");}
+  else if(id==="errc"){["#e8643c","#e8a93c","#16b6c6","#0e8ce4"].forEach(function(c,i){r(4+i*19,8,16,36,c+"22",2); r(5+i*19,9,14,10,c,2);});}
+  else if(id==="ii"){var gs=getGlobal(); t(gs,41,32,20,"#2fa8ff"); t("/ 100",41,44,7,"#8aa4ba");}
+  else if(id==="bum"){for(var row=0;row<4;row++)for(var col=0;col<5;col++){var k=row+"-"+col;var fills={empty:"#1a3047",pain:"#e8643c44",opportunity:"#0e8ce444",strength:"#16b6c644"};r(3+col*16,5+row*11,14,9,fills[bumState[k]]||"#1a3047",2);}}
+  else{t("Recommandations",41,22,7,"#e9f2fa"); r(11,30,60,2,"#0e8ce4"); t("Co-Pilot + Etapes",41,42,6,"#2fa8ff");}
+  return s;
+}
+function renderSlidePreviews(){
+  var cont=document.getElementById("slidePreviews"); cont.innerHTML="";
+  SLIDES_DEF.forEach(function(sd,i){
+    var row=document.createElement("div"); row.className="slide-row"+(slideInc[sd.id]?"":" off");
+    var thumb=document.createElement("div"); thumb.className="slide-thumb"; thumb.appendChild(thumbSVG(sd.id));
+    var info=document.createElement("div"); info.className="slide-info";
+    info.innerHTML='<div class="slide-num">Diapo '+(i+1)+'</div><div class="slide-title">'+sd.title+'</div><div class="slide-desc">'+sd.desc+'</div>';
+    var chk=document.createElement("div"); chk.className="slide-chk"+(slideInc[sd.id]?" on":""); chk.textContent=slideInc[sd.id]?"✓":"";
+    chk.onclick=function(){slideInc[sd.id]=!slideInc[sd.id]; renderSlidePreviews();};
+    row.append(thumb,info,chk); cont.appendChild(row);
+  });
+}
+renderSlidePreviews();
+
+/* ---- GENERATE PPTX ---- */
+document.getElementById("genPpt").onclick=async function(){
+  if(typeof PptxGenJS==="undefined"){alert("La bibliotheque PPTX n'est pas encore chargee. Verifiez votre connexion internet."); return;}
+  var pptx=new PptxGenJS();
+  pptx.layout="LAYOUT_16x9";
+  var proj=document.getElementById("pptProject").value||"Mon Projet";
+  var org=document.getElementById("pptOrg").value||"Blue Frontier";
+  var today=new Date().toLocaleDateString("fr-FR",{day:"2-digit",month:"long",year:"numeric"});
+  var gs=getGlobal();
+  function add(sl,text,x,y,w,h,opts){sl.addText(text,Object.assign({x:x,y:y,w:w,h:h,fontFace:"Helvetica"},opts||{}));}
+
+  if(slideInc.cover){
+    var s=pptx.addSlide(); s.background={color:"0a1726"};
+    s.addShape(pptx.ShapeType.rect,{x:0,y:0,w:0.2,h:5.63,fill:{color:"0e8ce4"}});
+    add(s,"BLUE FRONTIER",0.4,0.8,9,1.1,{fontSize:42,bold:true,color:"2fa8ff"});
+    add(s,proj,0.4,2.0,9,0.7,{fontSize:22,color:"e9f2fa"});
+    add(s,org+" · "+today,0.4,2.8,9,0.5,{fontSize:13,color:"5e7184"});
+    add(s,"Rapport Strategique Ocean Bleu — Kim & Mauborgne",0.4,3.5,9,0.4,{fontSize:11,color:"445566",italic:true});
+  }
+
+  if(slideInc.errc){
+    var s=pptx.addSlide(); s.background={color:"ffffff"};
+    add(s,"Grille ERRC",0.4,0.2,9,0.6,{fontSize:26,bold:true,color:"0d2233"});
+    add(s,"Eliminer · Reduire · Augmenter · Creer",0.4,0.8,9,0.4,{fontSize:12,color:"5e7184"});
+    var qcols=["e8643c","e8a93c","16b6c6","0e8ce4"];
+    var qlabs=["ELIMINER","REDUIRE","AUGMENTER","CREER"];
+    QUADRANTS.forEach(function(q,i){
+      var x=0.2+i*2.4;
+      s.addShape(pptx.ShapeType.rect,{x:x,y:1.3,w:2.25,h:0.42,fill:{color:qcols[i]},rectRadius:0.04});
+      add(s,qlabs[i],x,1.38,2.25,0.3,{fontSize:10,bold:true,color:"ffffff",align:"center"});
+      var items=errc[q.id].filter(function(c){return c.name.trim();});
+      add(s,items.length?items.map(function(c){return "- "+c.name;}).join("\n"):"(aucun facteur)",x+0.05,1.8,2.15,3.2,{fontSize:10,color:items.length?"0d2233":"aaaaaa",italic:!items.length,valign:"top"});
+    });
+  }
+
+  if(slideInc.ii){
+    var s=pptx.addSlide(); s.background={color:"ffffff"};
+    add(s,"Blue Ocean Idea Index",0.4,0.2,9,0.6,{fontSize:26,bold:true,color:"0d2233"});
+    var vc=gs>=65?"0e8ce4":gs>=40?"e8a93c":"e8643c";
+    var vt=gs>=65?"Ocean Bleu":gs>=40?"En transition":"Ocean Rouge";
+    add(s,String(gs),0.4,0.9,2,1.3,{fontSize:64,bold:true,color:vc});
+    add(s,"/ 100",0.4,2.15,2,0.4,{fontSize:17,color:"5e7184"});
+    add(s,vt,0.4,2.65,2,0.4,{fontSize:12,bold:true,color:vc});
+    PILLARS.forEach(function(p,i){
+      var x=3.0, y=0.9+i*0.95, sc=pillarScore(p.id);
+      add(s,p.label,x,y,3.2,0.35,{fontSize:11,bold:true,color:"0d2233"});
+      s.addShape(pptx.ShapeType.rect,{x:x,y:y+0.38,w:3.2,h:0.16,fill:{color:"e0eaf2"},rectRadius:0.04});
+      if(sc>0) s.addShape(pptx.ShapeType.rect,{x:x,y:y+0.38,w:3.2*sc/100,h:0.16,fill:{color:p.color.replace("#","")},rectRadius:0.04});
+      add(s,sc+"%",x+3.3,y+0.38,0.5,0.16,{fontSize:10,bold:true,color:p.color.replace("#","")});
+    });
+  }
+
+  if(slideInc.bum){
+    var s=pptx.addSlide(); s.background={color:"ffffff"};
+    add(s,"Carte d'Utilite Acheteur",0.3,0.15,9.4,0.5,{fontSize:22,bold:true,color:"0d2233"});
+    var rows=[];
+    var hdr=[{text:"Leviers / Etapes",options:{bold:true,fontSize:9,fill:{color:"0d2233"},color:"ffffff",align:"center"}}];
+    STAGES.forEach(function(st){hdr.push({text:st,options:{bold:true,fontSize:9,fill:{color:"0e8ce4"},color:"ffffff",align:"center"}});});
+    rows.push(hdr);
+    LEVERS.forEach(function(lev,r){
+      var row=[{text:lev,options:{bold:true,fontSize:8,fill:{color:"f4f8fc"},color:"0d2233"}}];
+      STAGES.forEach(function(_,c){
+        var st=bumState[r+"-"+c];
+        var icns={empty:"",pain:"!",opportunity:"o",strength:"ok"};
+        var bgs={empty:"ffffff",pain:"fff4f2",opportunity:"e6f2fb",strength:"e8f8f5"};
+        row.push({text:icns[st],options:{align:"center",fontSize:10,fill:{color:bgs[st]}}});
+      });
+      rows.push(row);
+    });
+    s.addTable(rows,{x:0.2,y:0.75,w:9.6,h:4.4,fontSize:8,border:{pt:0.5,color:"e0eaf2"},autoPage:false});
+  }
+
+  if(slideInc.insights){
+    var s=pptx.addSlide(); s.background={color:"0a1726"};
+    add(s,"Recommandations",0.5,0.3,9,0.65,{fontSize:28,bold:true,color:"2fa8ff"});
+    s.addShape(pptx.ShapeType.line,{x:0.5,y:1.1,w:3,h:0,line:{color:"0e8ce4",width:2}});
+    var bullets=[];
+    if(!errc.cre.some(function(c){return c.name.trim();})) bullets.push("Ajoutez des facteurs a Creer dans l'ERRC — c'est la cle d'un ocean bleu.");
+    if(!errc.eli.some(function(c){return c.name.trim();})) bullets.push("Identifiez ce que l'industrie fait par habitude sans creer de valeur (quadrant Eliminer).");
+    if(gs<65) bullets.push("Idea Index : "+gs+"/100. Renforcez les piliers faibles pour atteindre l'ocean bleu.");
+    bullets.push("Transposez vos actions ERRC dans la courbe Cible du Strategy Canvas.");
+    bullets.push("Testez vos hypotheses aupres de non-clients des 3 niveaux avant de finaliser l'offre.");
+    bullets.push("Calculez l'equilibre valeur-prix-cout pour verifier la viabilite economique.");
+    add(s,bullets.map(function(b){return "->  "+b;}).join("\n"),0.5,1.35,9,3.6,{fontSize:12,color:"e9f2fa",lineSpacingMultiple:1.55,valign:"top"});
+    add(s,"Blue Frontier - Strategie Ocean Bleu - Kim & Mauborgne",0.5,5.1,9,0.4,{fontSize:10,color:"5e7184",align:"center"});
+  }
+
+  await pptx.writeFile({fileName:(proj||"Blue-Frontier").replace(/[^\w\-]+/g,"_")+".pptx"});
+  renderSlidePreviews();
+};
+
+/* Theme */
+document.getElementById("themeBtn").onclick=function(){
+  var dark=document.documentElement.getAttribute("data-theme")==="dark";
+  document.documentElement.setAttribute("data-theme",dark?"light":"dark");
+  this.textContent=dark?"🌙":"☀️";
+  drawRadar();
+};
+})();
+</script>
+</body>
+</html>
