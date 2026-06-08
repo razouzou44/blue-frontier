@@ -680,7 +680,12 @@ function renderPaths(){
     ta.placeholder='Notez vos idées ici — industries alternatives, exemples, opportunités…';
     ta.value=p.ideas;
     ta.onclick=e=>e.stopPropagation();
-    ta.oninput=()=>{p.ideas=ta.value; computePathsInsight(); renderPaths();};
+    ta.oninput=()=>{
+      p.ideas=ta.value;
+      const n=ta.value.split('\n').filter(l=>l.trim()).length;
+      cnt.textContent=n+' idée'+(n!==1?'s':'');
+      computePathsInsight();
+    };
     const cnt=document.createElement('div'); cnt.className='idea-count';
     const lines=p.ideas.split('\n').filter(l=>l.trim()).length;
     cnt.textContent=lines+' idée'+(lines!==1?'s':'');
