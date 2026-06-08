@@ -3,581 +3,494 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blue Frontier — Strategy Canvas</title>
+<title>Blue Frontier — Stratégie Océan Bleu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,600;9..144,0,700;9..144,1,400&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#e9eef3; --bg2:#dfe8f0;
-  --panel:#ffffff; --panel-2:#f6f9fc;
+  --bg:#e9eef3; --bg2:#dce6ef;
+  --panel:#ffffff; --panel2:#f4f8fc;
   --ink:#0d2233; --muted:#5e7184; --faint:#90a2b3;
-  --line:#e2eaf1; --hair:#d4dfe9;
-  --accent:#0e8ce4; --accent-soft:#e6f2fb;
-  --shadow:0 1px 2px rgba(13,34,51,.05),0 10px 30px -12px rgba(13,34,51,.18);
-  --radius:16px;
+  --line:#e0eaf2; --hair:#d0dde8;
+  --accent:#0e8ce4; --accent2:#16b6c6;
+  --accent-soft:#e6f2fb;
+  --shadow-sm:0 1px 3px rgba(13,34,51,.06),0 4px 12px -4px rgba(13,34,51,.12);
+  --shadow:0 2px 4px rgba(13,34,51,.05),0 12px 36px -10px rgba(13,34,51,.2);
+  --shadow-lg:0 4px 6px rgba(13,34,51,.05),0 24px 60px -12px rgba(13,34,51,.28);
+  --r:18px;
 }
 html[data-theme="dark"]{
-  --bg:#06101c; --bg2:#0a1726;
-  --panel:#0e1f31; --panel-2:#11253a;
-  --ink:#e9f2fa; --muted:#90a6ba; --faint:#5e7588;
+  --bg:#06101c; --bg2:#09172a;
+  --panel:#0e1f31; --panel2:#11253a;
+  --ink:#e9f2fa; --muted:#8aa4ba; --faint:#4e6678;
   --line:#1a3047; --hair:#22394f;
-  --accent:#2fa8ff; --accent-soft:#0f2b42;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px -16px rgba(0,0,0,.6);
+  --accent:#2fa8ff; --accent2:#38e0d0;
+  --accent-soft:#0f2b42;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.3),0 4px 12px -4px rgba(0,0,0,.4);
+  --shadow:0 2px 4px rgba(0,0,0,.3),0 12px 36px -10px rgba(0,0,0,.5);
+  --shadow-lg:0 4px 6px rgba(0,0,0,.3),0 24px 60px -12px rgba(0,0,0,.65);
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 body{
   font-family:"Hanken Grotesk",system-ui,sans-serif;
   color:var(--ink);
-  background:
-    radial-gradient(1100px 600px at 88% -10%, color-mix(in srgb,var(--accent) 16%, transparent), transparent 60%),
-    radial-gradient(900px 600px at -5% 110%, color-mix(in srgb,var(--accent) 12%, transparent), transparent 55%),
-    linear-gradient(160deg,var(--bg),var(--bg2));
-  background-attachment:fixed;
   min-height:100vh;
   -webkit-font-smoothing:antialiased;
-  padding-bottom:48px;
+  overflow-x:hidden;
 }
-.wrap{max-width:1240px;margin:0 auto;padding:18px 20px 0}
 
-/* Top bar */
-.topbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
-.brand{display:flex;align-items:center;gap:11px;font-weight:700}
-.logo{width:34px;height:34px;border-radius:10px;position:relative;flex:none;
-  background:linear-gradient(150deg,var(--accent),#16c6c6);box-shadow:0 6px 16px -6px var(--accent)}
-.logo::after{content:"";position:absolute;inset:7px 6px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
-  border:2px solid rgba(255,255,255,.85);border-top-color:transparent;transform:rotate(-20deg)}
-.brand .name{font-family:"Fraunces",serif;font-size:21px;letter-spacing:.2px}
-.brand .name b{font-weight:600}
-.brand .name span{color:var(--accent)}
-.crumb{color:var(--faint);font-size:13px;margin-left:2px}
-.topbar .spacer{flex:1}
-.proj{display:flex;align-items:center;gap:10px}
-.proj input{font-family:"Fraunces",serif;font-size:15px;font-weight:500;color:var(--ink);
-  background:transparent;border:0;border-bottom:1.5px dashed transparent;padding:3px 2px;min-width:170px}
-.proj input:hover{border-bottom-color:var(--hair)}
-.proj input:focus{outline:0;border-bottom-color:var(--accent)}
-.pill{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
-  padding:4px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
-.avatars{display:flex}
-.avatars span{width:27px;height:27px;border-radius:50%;border:2px solid var(--panel);
-  margin-left:-8px;font-size:11px;font-weight:700;color:#fff;display:grid;place-items:center}
-.btn{font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;
-  background:var(--panel);border:1px solid var(--hair);border-radius:11px;padding:9px 13px;
-  display:inline-flex;align-items:center;gap:7px;transition:.15s;box-shadow:var(--shadow)}
+/* ── Background ─────────────────────────── */
+.bg-wrap{
+  position:fixed;inset:0;z-index:-1;
+  background:linear-gradient(165deg, var(--bg) 0%, var(--bg2) 100%);
+}
+.bg-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;pointer-events:none}
+.bg-orb.o1{width:800px;height:600px;top:-200px;right:-150px;
+  background:radial-gradient(circle,color-mix(in srgb,var(--accent) 35%,transparent),transparent 70%)}
+.bg-orb.o2{width:700px;height:500px;bottom:-150px;left:-100px;
+  background:radial-gradient(circle,color-mix(in srgb,var(--accent2) 30%,transparent),transparent 70%)}
+.bg-orb.o3{width:400px;height:400px;top:40%;left:30%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--accent) 12%,transparent),transparent 70%)}
+
+/* ── Nav ────────────────────────────────── */
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:14px 40px;
+  background:color-mix(in srgb,var(--panel) 80%,transparent);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+.logo{width:36px;height:36px;border-radius:11px;flex:none;position:relative;
+  background:linear-gradient(145deg,var(--accent),var(--accent2));
+  box-shadow:0 6px 18px -6px var(--accent)}
+.logo::before{content:"";position:absolute;inset:5px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.9);border-top-color:transparent;transform:rotate(-20deg)}
+.logo::after{content:"";position:absolute;width:5px;height:5px;border-radius:50%;
+  background:#fff;bottom:8px;right:8px;opacity:.85}
+.brand-name{font-family:"Fraunces",serif;font-size:20px;font-weight:600;letter-spacing:.1px}
+.brand-name em{color:var(--accent);font-style:normal}
+.nav-tag{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.nav-spacer{flex:1}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-link{font-size:13.5px;font-weight:600;color:var(--muted);text-decoration:none;
+  padding:8px 14px;border-radius:10px;transition:.15s}
+.nav-link:hover{color:var(--ink);background:var(--panel2)}
+.btn{font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border-radius:11px;
+  padding:9px 18px;border:1.5px solid var(--hair);background:var(--panel);color:var(--ink);
+  transition:.18s;box-shadow:var(--shadow-sm);display:inline-flex;align-items:center;gap:8px}
 .btn:hover{transform:translateY(-1px);border-color:var(--accent)}
-.btn.ghost{background:transparent;box-shadow:none}
-.btn.accent{background:linear-gradient(150deg,var(--accent),#16b6c6);color:#fff;border-color:transparent}
+.btn.ghost{background:transparent;box-shadow:none;border-color:transparent}
 .btn.icon{padding:9px;width:38px;justify-content:center}
-.btn.sm{padding:6px 9px;font-size:12px;border-radius:9px;box-shadow:none}
-select.btn{appearance:none;padding-right:28px;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237d8da1' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 11px center}
 
-/* Layout */
-.grid{display:grid;grid-template-columns:1fr 330px;gap:18px;align-items:start}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-.chart-card{padding:18px 18px 8px}
-.chart-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:2px 4px 8px}
-.chart-head h2{font-family:"Fraunces",serif;font-weight:600;font-size:18px;margin:0}
-.chart-head p{margin:0;color:var(--muted);font-size:12.5px}
-.chart-head .hint{margin-left:auto;font-size:12px;color:var(--faint);display:flex;align-items:center;gap:6px}
+/* ── Hero ───────────────────────────────── */
+.hero{
+  text-align:center;padding:100px 40px 80px;
+  max-width:860px;margin:0 auto;
+  animation:fadeUp .7s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+  color:var(--accent);background:var(--accent-soft);padding:6px 14px;border-radius:999px;
+  margin-bottom:28px;border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
+.hero h1{
+  font-family:"Fraunces",serif;font-size:clamp(40px,6vw,72px);font-weight:700;
+  line-height:1.08;letter-spacing:-.5px;margin-bottom:24px;
+}
+.hero h1 .hl{
+  background:linear-gradient(130deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero h1 .it{font-style:italic;font-weight:400}
+.hero p{
+  font-size:clamp(16px,2vw,19px);color:var(--muted);max-width:580px;margin:0 auto 44px;
+  line-height:1.65;
+}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.cta{font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;
+  padding:15px 28px;border-radius:14px;transition:.2s ease;display:inline-flex;align-items:center;gap:10px;
+  border:2px solid transparent}
+.cta.primary{
+  background:linear-gradient(140deg,var(--accent),var(--accent2));color:#fff;
+  box-shadow:0 8px 28px -8px var(--accent)}
+.cta.primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px var(--accent)}
+.cta.secondary{background:var(--panel);color:var(--ink);border-color:var(--hair);box-shadow:var(--shadow)}
+.cta.secondary:hover{transform:translateY(-2px);border-color:var(--accent)}
 
-svg.canvas{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
-.pt-hit{fill:transparent;cursor:grab;touch-action:none}
-.pt-hit:active{cursor:grabbing}
-.gline{stroke:var(--hair);stroke-width:1}
-.gline.zero{stroke:var(--line);stroke-width:1.5}
-.axislab{fill:var(--faint);font-size:12px;font-family:"Hanken Grotesk",sans-serif}
-.flab{fill:var(--ink);font-size:12.5px;font-weight:600;font-family:"Hanken Grotesk",sans-serif}
-.ytitle{fill:var(--muted);font-size:12px;font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+/* Wave divider */
+.wave-divider{width:100%;overflow:hidden;line-height:0;margin-top:-2px}
+.wave-divider svg{display:block;width:100%;height:60px}
 
-/* Factor editor */
-.factors{padding:6px 14px 16px}
-.factors .lbl{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--faint);margin:4px 4px 10px}
-.frow{display:flex;gap:9px;overflow-x:auto;padding-bottom:6px}
-.fchip{flex:none;width:138px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:9px 10px}
-.fchip input{width:100%;border:0;background:transparent;color:var(--ink);font:inherit;font-size:12.5px;font-weight:600;padding:2px 0}
-.fchip input:focus{outline:0}
-.fchip .fbar{display:flex;justify-content:space-between;margin-top:6px}
-.minibtn{border:0;background:transparent;color:var(--faint);cursor:pointer;font-size:13px;padding:3px 5px;border-radius:7px;line-height:1}
-.minibtn:hover{background:var(--accent-soft);color:var(--accent)}
-.fchip.add{display:grid;place-items:center;cursor:pointer;border-style:dashed;color:var(--muted);font-weight:600;font-size:13px}
-.fchip.add:hover{border-color:var(--accent);color:var(--accent)}
+/* ── Stats bar ───────────────────────────── */
+.stats{
+  display:flex;justify-content:center;gap:0;flex-wrap:wrap;
+  max-width:700px;margin:0 auto 80px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden;
+  animation:fadeUp .7s .15s ease both;
+}
+.stat{flex:1;min-width:160px;padding:22px 20px;text-align:center;border-right:1px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat .sv{font-family:"Fraunces",serif;font-size:32px;font-weight:700;
+  background:linear-gradient(130deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat .sk{font-size:12px;font-weight:600;color:var(--muted);margin-top:4px;letter-spacing:.2px}
 
-/* Sidebar */
-.side{display:flex;flex-direction:column;gap:18px}
-.panel{padding:16px}
-.panel h3{font-family:"Fraunces",serif;font-weight:600;font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
-.series{display:flex;flex-direction:column;gap:9px}
-.srow{display:flex;align-items:center;gap:9px;padding:8px;border-radius:11px;border:1px solid var(--line);background:var(--panel-2)}
-.srow.off{opacity:.5}
-.swatch{width:14px;height:14px;border-radius:5px;flex:none;border:2px solid var(--panel)}
-.eye{border:0;background:transparent;cursor:pointer;font-size:14px;color:var(--faint);padding:2px}
-.srow .sname{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;font-weight:600}
-.srow .sname:focus{outline:0}
-.srow select{font:inherit;font-size:11px;font-weight:600;color:var(--muted);background:var(--panel);border:1px solid var(--hair);border-radius:8px;padding:4px 6px;cursor:pointer}
-.srow input[type=color]{width:24px;height:24px;border:0;background:none;padding:0;cursor:pointer;border-radius:6px}
-.srow input[type=color]::-webkit-color-swatch-wrapper{padding:0}
-.srow input[type=color]::-webkit-color-swatch{border:1px solid var(--hair);border-radius:6px}
-.srow .del{border:0;background:transparent;color:var(--faint);cursor:pointer;font-size:14px;padding:2px}
-.srow .del:hover{color:#e8643c}
-.addseries{margin-top:11px;width:100%;justify-content:center}
+/* ── Section title ───────────────────────── */
+.section{max-width:1160px;margin:0 auto;padding:0 40px 80px}
+.section-head{text-align:center;margin-bottom:48px}
+.section-head .eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:12px}
+.section-head h2{font-family:"Fraunces",serif;font-size:clamp(28px,4vw,42px);font-weight:600;
+  line-height:1.15;margin-bottom:14px}
+.section-head p{font-size:16px;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.6}
 
-/* Insight */
-.meter{height:9px;border-radius:999px;background:var(--line);overflow:hidden;margin:4px 0 4px}
-.meter > i{display:block;height:100%;border-radius:999px;transition:width .35s ease;
-  background:linear-gradient(90deg,#e8643c,#e8a93c,#16b6c6,var(--accent))}
-.meter-meta{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:12px}
-.verdict{font-weight:800}
-.errc{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 12px}
-.epill{border-radius:10px;padding:9px 10px;border:1px solid var(--line);background:var(--panel-2)}
-.epill .k{font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--faint)}
-.epill .v{font-family:"Fraunces",serif;font-size:22px;font-weight:600;line-height:1.1}
-.epill.cre{border-left:3px solid var(--accent)} .epill.eli{border-left:3px solid #e8643c}
-.epill.rai{border-left:3px solid #16b6c6} .epill.red{border-left:3px solid #e8a93c}
-.copilot{display:flex;gap:10px;align-items:flex-start;background:var(--accent-soft);
-  border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);border-radius:12px;padding:11px 12px}
-.copilot .ic{width:26px;height:26px;border-radius:8px;flex:none;display:grid;place-items:center;color:#fff;
-  background:linear-gradient(150deg,var(--accent),#16b6c6);font-size:14px}
-.copilot p{margin:0;font-size:12.5px;line-height:1.45;color:var(--ink)}
-.copilot b{color:var(--accent)}
+/* ── Tool cards ─────────────────────────── */
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:800px){.tools-grid{grid-template-columns:1fr}}
 
-/* Tooltip */
-#tip{position:fixed;pointer-events:none;z-index:50;background:var(--ink);color:var(--panel);
-  font-size:12px;font-weight:600;padding:6px 9px;border-radius:9px;opacity:0;transform:translate(-50%,-140%);
-  transition:opacity .12s;white-space:nowrap;box-shadow:0 8px 20px -6px rgba(0,0,0,.4)}
-#tip b{color:var(--accent);font-weight:800}
+.tool-card{
+  background:var(--panel);border:1.5px solid var(--line);border-radius:22px;
+  overflow:hidden;box-shadow:var(--shadow);
+  transition:.25s ease;display:flex;flex-direction:column;
+  animation:fadeUp .7s ease both;
+}
+.tool-card:nth-child(2){animation-delay:.1s}
+.tool-card:hover{transform:translateY(-6px);border-color:var(--accent);box-shadow:var(--shadow-lg)}
 
-.foot{max-width:1240px;margin:18px auto 0;padding:0 20px;color:var(--faint);font-size:11.5px;text-align:center}
-@media (max-width:900px){
-  .grid{grid-template-columns:1fr}
-  .proj input{min-width:120px}
+.tool-preview{
+  height:200px;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.tool-preview svg{width:100%;height:100%;position:absolute;inset:0}
+.tool-preview .preview-gradient{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 40%,var(--panel) 100%);
+}
+
+.tool-body{padding:24px 26px 28px;flex:1;display:flex;flex-direction:column;gap:14px}
+.tool-badge{display:inline-flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
+  color:var(--accent);background:var(--accent-soft);padding:5px 11px;border-radius:999px;
+  border:1px solid color-mix(in srgb,var(--accent) 25%,transparent)}
+.tool-body h3{font-family:"Fraunces",serif;font-size:24px;font-weight:600;line-height:1.2}
+.tool-body p{font-size:14px;color:var(--muted);line-height:1.6;flex:1}
+.tool-features{display:flex;flex-direction:column;gap:7px;margin:4px 0}
+.tf{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted)}
+.tf::before{content:"✓";color:var(--accent);font-weight:800;font-size:12px;flex:none}
+.tool-cta{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-radius:13px;background:var(--panel2);
+  border:1.5px solid var(--line);text-decoration:none;color:var(--ink);
+  font-weight:700;font-size:14px;transition:.18s;margin-top:4px;
+}
+.tool-cta:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateX(4px)}
+.tool-cta .arrow{font-size:18px;transition:.18s}
+.tool-cta:hover .arrow{transform:translateX(4px)}
+
+/* ── How it works ────────────────────────── */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:0}
+@media(max-width:700px){.steps{grid-template-columns:1fr}}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;
+  box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+.step::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.step-num{font-family:"Fraunces",serif;font-size:52px;font-weight:700;color:var(--line);
+  line-height:1;margin-bottom:14px}
+.step h4{font-family:"Fraunces",serif;font-size:18px;font-weight:600;margin-bottom:8px}
+.step p{font-size:13.5px;color:var(--muted);line-height:1.6}
+.step .tool-tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;
+  margin-top:12px;letter-spacing:.3px}
+.step .tool-tag.blue{background:var(--accent-soft);color:var(--accent)}
+.step .tool-tag.teal{background:color-mix(in srgb,var(--accent2) 15%,transparent);color:var(--accent2)}
+
+/* ── Coming soon ─────────────────────────── */
+.soon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.soon-card{background:var(--panel);border:1.5px dashed var(--hair);border-radius:var(--r);
+  padding:22px;opacity:.7;transition:.2s}
+.soon-card:hover{opacity:1;border-color:var(--accent)}
+.soon-icon{font-size:28px;margin-bottom:12px}
+.soon-card h4{font-family:"Fraunces",serif;font-size:16px;font-weight:600;margin-bottom:6px}
+.soon-card p{font-size:12.5px;color:var(--muted);line-height:1.5}
+.soon-tag{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;
+  margin-top:10px;background:var(--panel2);color:var(--faint);letter-spacing:.3px;text-transform:uppercase}
+
+/* ── Footer ──────────────────────────────── */
+footer{
+  text-align:center;padding:40px;
+  border-top:1px solid var(--line);color:var(--faint);font-size:13px;
+}
+footer a{color:var(--accent);text-decoration:none}
+footer .foot-brand{font-family:"Fraunces",serif;font-size:17px;font-weight:600;color:var(--ink);margin-bottom:8px}
+footer .foot-brand em{color:var(--accent);font-style:normal}
+
+/* ── Animations ─────────────────────────── */
+.fade-in{opacity:0;transform:translateY(20px);transition:.6s ease}
+.fade-in.visible{opacity:1;transform:none}
+
+@media(max-width:600px){
+  nav{padding:12px 20px}
+  .hero{padding:60px 20px 50px}
+  .section{padding:0 20px 60px}
+  .stats{margin-bottom:60px}
+  .stat{min-width:140px}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
-
-  <!-- Top bar -->
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo"></div>
-      <div class="name"><b>Blue</b> <span>Frontier</span></div>
-      <span class="crumb">/ Strategy Canvas</span>
-    </div>
-    <div class="spacer"></div>
-    <div class="proj">
-      <input id="projName" value="FinTech pour seniors" aria-label="Nom du projet">
-      <span class="pill">v3</span>
-      <div class="avatars">
-        <span style="background:#0e8ce4">SR</span>
-        <span style="background:#16b6c6">KM</span>
-        <span style="background:#e8643c">AL</span>
-      </div>
-    </div>
-    <select class="btn" id="preset" title="Charger un cas réel">
-      <option value="">Charger un exemple…</option>
-      <option value="fintech">💳 FinTech seniors</option>
-      <option value="yellowtail">🍷 [yellow tail]</option>
-      <option value="cirque">🎪 Cirque du Soleil</option>
-    </select>
-    <button class="btn ghost icon" id="theme" title="Thème clair / sombre">🌙</button>
-    <button class="btn accent" id="export">↧ Export PNG</button>
-  </header>
-
-  <!-- Main -->
-  <div class="grid">
-    <!-- CHART -->
-    <section class="card chart-card">
-      <div class="chart-head">
-        <h2>Courbe de valeur</h2>
-        <p>Glissez les points verticalement pour fixer le niveau de chaque facteur.</p>
-        <span class="hint">✱ astuce : faites diverger la courbe <b style="color:var(--accent)">&nbsp;Cible&nbsp;</b></span>
-      </div>
-      <svg class="canvas" id="svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Strategy canvas"></svg>
-    </section>
-
-    <!-- SIDEBAR -->
-    <aside class="side">
-      <div class="card panel">
-        <h3>📈 Courbes</h3>
-        <div class="series" id="seriesList"></div>
-        <button class="btn sm addseries" id="addSeries">+ Ajouter une courbe</button>
-      </div>
-
-      <div class="card panel">
-        <h3>🧭 Analyse Océan Bleu</h3>
-        <div class="meter"><i id="meterFill" style="width:0%"></i></div>
-        <div class="meter-meta">
-          <span>Indice de divergence</span>
-          <span class="verdict" id="verdict">—</span>
-        </div>
-        <div class="errc">
-          <div class="epill eli"><div class="k">Éliminer</div><div class="v" id="cEli">0</div></div>
-          <div class="epill rai"><div class="k">Augmenter</div><div class="v" id="cRai">0</div></div>
-          <div class="epill red"><div class="k">Réduire</div><div class="v" id="cRed">0</div></div>
-          <div class="epill cre"><div class="k">Créer</div><div class="v" id="cCre">0</div></div>
-        </div>
-        <div class="copilot">
-          <div class="ic">✦</div>
-          <p id="copilotMsg">Définissez une courbe au rôle <b>Cible</b> pour lancer l'analyse.</p>
-        </div>
-      </div>
-    </aside>
-  </div>
-
-  <!-- Factor editor -->
-  <section class="card factors" style="margin-top:18px">
-    <div class="lbl">Facteurs de concurrence — axe horizontal</div>
-    <div class="frow" id="factorRow"></div>
-  </section>
+<div class="bg-wrap">
+  <div class="bg-orb o1"></div>
+  <div class="bg-orb o2"></div>
+  <div class="bg-orb o3"></div>
 </div>
 
-<div class="foot">Prototype interactif — Blue Frontier · Strategy Canvas. Les données restent en mémoire (rien n'est envoyé). Glisser-déposer des points · ERRC en direct · rôles Actuel / Concurrent / Cible.</div>
-<div id="tip"></div>
+<!-- Nav -->
+<nav>
+  <a href="#" class="brand">
+    <div class="logo"></div>
+    <span class="brand-name"><b>Blue</b> <em>Frontier</em></span>
+  </a>
+  <span class="nav-tag">Beta</span>
+  <div class="nav-spacer"></div>
+  <div class="nav-links">
+    <a href="#outils" class="nav-link">Outils</a>
+    <a href="#methode" class="nav-link">Méthode</a>
+    <button class="btn ghost icon" id="themeBtn" title="Thème clair / sombre">🌙</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-eyebrow">✦ Stratégie Océan Bleu — Kim & Mauborgne</div>
+  <h1>
+    Cessez de<br>
+    <span class="hl">concurrencer.</span><br>
+    <span class="it">Créez votre marché.</span>
+  </h1>
+  <p>Blue Frontier transforme la méthode Océan Bleu en outils interactifs — Strategy Canvas, Non-Clients, Six Chemins — pour vous aider à concevoir une offre que la concurrence ne peut pas imiter.</p>
+  <div class="hero-ctas">
+    <a href="strategy-canvas.html" class="cta primary">🎨 Ouvrir le Strategy Canvas</a>
+    <a href="blue-frontier-explorer.html" class="cta secondary">🧭 Explorateur de Frontières</a>
+  </div>
+</section>
+
+<!-- Stats -->
+<div style="max-width:860px;margin:0 auto;padding:0 40px">
+  <div class="stats">
+    <div class="stat"><div class="sv">3</div><div class="sk">Outils stratégiques</div></div>
+    <div class="stat"><div class="sv">3</div><div class="sk">Cas réels intégrés</div></div>
+    <div class="stat"><div class="sv">7</div><div class="sk">Étapes du processus</div></div>
+    <div class="stat"><div class="sv">100%</div><div class="sk">Gratuit & offline</div></div>
+  </div>
+</div>
+
+<!-- Tools -->
+<section class="section" id="outils">
+  <div class="section-head fade-in">
+    <div class="eyebrow">Outils disponibles</div>
+    <h2>Deux ateliers stratégiques<br>prêts à l'emploi</h2>
+    <p>Chaque outil est autonome, interactif et exportable. Aucune installation requise.</p>
+  </div>
+
+  <div class="tools-grid">
+
+    <!-- Tool 1 - Strategy Canvas -->
+    <div class="tool-card">
+      <div class="tool-preview" style="background:linear-gradient(145deg,#e6f2fb,#d0edfb)">
+        <svg viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice">
+          <!-- Grid lines -->
+          <line x1="60" y1="20" x2="60" y2="170" stroke="#b8d8f0" stroke-width="1"/>
+          <line x1="60" y1="20" x2="560" y2="20" stroke="#b8d8f0" stroke-width="1"/>
+          <line x1="60" y1="65" x2="560" y2="65" stroke="#c8e2f0" stroke-width="1" stroke-dasharray="3 5"/>
+          <line x1="60" y1="110" x2="560" y2="110" stroke="#c8e2f0" stroke-width="1" stroke-dasharray="3 5"/>
+          <line x1="60" y1="170" x2="560" y2="170" stroke="#b8d8f0" stroke-width="1"/>
+          <!-- Current curve (coral) -->
+          <polyline points="100,85 182,55 264,130 346,75 428,60 510,95"
+            fill="none" stroke="#e8643c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+          <!-- Competitor curve (gray) -->
+          <polyline points="100,105 182,80 264,120 346,95 428,85 510,115"
+            fill="none" stroke="#8497ab" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 5"/>
+          <!-- Target curve (blue) -->
+          <polyline points="100,50 182,140 264,40 346,35 428,25 510,50"
+            fill="none" stroke="#0e8ce4" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+          <!-- Points on blue curve -->
+          <circle cx="100" cy="50" r="6" fill="white" stroke="#0e8ce4" stroke-width="3"/>
+          <circle cx="182" cy="140" r="6" fill="white" stroke="#0e8ce4" stroke-width="3"/>
+          <circle cx="264" cy="40" r="6" fill="white" stroke="#0e8ce4" stroke-width="3"/>
+          <circle cx="346" cy="35" r="6" fill="white" stroke="#0e8ce4" stroke-width="3"/>
+          <circle cx="428" cy="25" r="6" fill="white" stroke="#0e8ce4" stroke-width="3"/>
+          <circle cx="510" cy="50" r="6" fill="white" stroke="#0e8ce4" stroke-width="3"/>
+          <!-- X axis labels -->
+          <text x="100" y="190" text-anchor="middle" font-family="Hanken Grotesk" font-size="12" fill="#8497ab">Prix</text>
+          <text x="182" y="190" text-anchor="middle" font-family="Hanken Grotesk" font-size="12" fill="#8497ab">Frais</text>
+          <text x="264" y="190" text-anchor="middle" font-family="Hanken Grotesk" font-size="12" fill="#8497ab">Appli</text>
+          <text x="346" y="190" text-anchor="middle" font-family="Hanken Grotesk" font-size="12" fill="#8497ab">Conseil</text>
+          <text x="428" y="190" text-anchor="middle" font-family="Hanken Grotesk" font-size="12" fill="#8497ab">Sécu.</text>
+          <text x="510" y="190" text-anchor="middle" font-family="Hanken Grotesk" font-size="12" fill="#8497ab">Simplicité</text>
+        </svg>
+        <div class="preview-gradient"></div>
+      </div>
+      <div class="tool-body">
+        <span class="tool-badge">🎨 Outil 1</span>
+        <h3>Strategy Canvas</h3>
+        <p>Cartographiez visuellement les facteurs de concurrence de votre industrie, tracez votre courbe de valeur actuelle et dessinez votre courbe cible Océan Bleu.</p>
+        <div class="tool-features">
+          <div class="tf">Points déplaçables à la souris / au doigt</div>
+          <div class="tf">Courbes multiples (actuel, concurrent, cible)</div>
+          <div class="tf">Analyse ERRC en temps réel</div>
+          <div class="tf">3 cas réels : [yellow tail], Cirque du Soleil…</div>
+          <div class="tf">Export PNG haute résolution</div>
+        </div>
+        <a href="strategy-canvas.html" class="tool-cta">
+          Ouvrir le Strategy Canvas <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Tool 2 - Explorateur -->
+    <div class="tool-card">
+      <div class="tool-preview" style="background:linear-gradient(145deg,#e8f8f5,#d0f0ee)">
+        <svg viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice">
+          <!-- Concentric rings -->
+          <ellipse cx="170" cy="105" rx="155" ry="90" fill="#dbeef8" stroke="#0e8ce4" stroke-width="2" opacity=".8"/>
+          <ellipse cx="170" cy="108" rx="108" ry="64" fill="#ffeee9" stroke="#e8643c" stroke-width="2" opacity=".85"/>
+          <ellipse cx="170" cy="111" rx="62" ry="38" fill="#fff6e6" stroke="#e8a93c" stroke-width="2" opacity=".9"/>
+          <ellipse cx="170" cy="114" rx="26" ry="16" fill="#0e8ce4" opacity=".9"/>
+          <text x="170" y="118" text-anchor="middle" font-family="Hanken Grotesk" font-size="9" font-weight="700" fill="white">Marché</text>
+          <text x="48" y="55" text-anchor="middle" font-family="Hanken Grotesk" font-size="10" font-weight="700" fill="#065fa0">N3 Inexplorés</text>
+          <text x="78" y="96" text-anchor="middle" font-family="Hanken Grotesk" font-size="10" font-weight="700" fill="#a33a1a">N2</text>
+          <text x="170" y="97" text-anchor="middle" font-family="Hanken Grotesk" font-size="10" font-weight="700" fill="#b86f0c">N1</text>
+          <!-- Buyer chain on right -->
+          <rect x="360" y="60" width="55" height="36" rx="9" fill="#e6f2fb" stroke="#0e8ce4" stroke-width="1.5"/>
+          <text x="388" y="73" text-anchor="middle" font-family="Hanken Grotesk" font-size="10" font-weight="700" fill="#0e8ce4">💳</text>
+          <text x="388" y="86" text-anchor="middle" font-family="Hanken Grotesk" font-size="9" fill="#5e7184">Acheteur</text>
+          <line x1="415" y1="78" x2="428" y2="78" stroke="#b8d0e0" stroke-width="1.5"/>
+          <rect x="428" y="60" width="55" height="36" rx="9" fill="#fff6e6" stroke="#e8a93c" stroke-width="1.5"/>
+          <text x="456" y="73" text-anchor="middle" font-family="Hanken Grotesk" font-size="10" font-weight="700" fill="#b86f0c">🧭</text>
+          <text x="456" y="86" text-anchor="middle" font-family="Hanken Grotesk" font-size="9" fill="#5e7184">Décideur</text>
+          <line x1="483" y1="78" x2="496" y2="78" stroke="#b8d0e0" stroke-width="1.5"/>
+          <rect x="496" y="60" width="55" height="36" rx="9" fill="#ffeee9" stroke="#e8643c" stroke-width="1.5"/>
+          <text x="524" y="73" text-anchor="middle" font-family="Hanken Grotesk" font-size="10" font-weight="700" fill="#a33a1a">👤</text>
+          <text x="524" y="86" text-anchor="middle" font-family="Hanken Grotesk" font-size="9" fill="#5e7184">Utilisateur</text>
+          <!-- Six paths mini -->
+          <text x="360" y="130" font-family="Hanken Grotesk" font-size="11" font-weight="700" fill="#5e7184">6 Chemins</text>
+          <rect x="360" y="136" width="55" height="22" rx="7" fill="#e6f2fb" stroke="#0e8ce4" stroke-width="1"/>
+          <text x="388" y="151" text-anchor="middle" font-family="Hanken Grotesk" font-size="10" fill="#0e8ce4">🔀 Alter.</text>
+          <rect x="422" y="136" width="55" height="22" rx="7" fill="#e6f2fb" stroke="#0e8ce4" stroke-width="1" opacity=".7"/>
+          <text x="450" y="151" text-anchor="middle" font-family="Hanken Grotesk" font-size="10" fill="#0e8ce4">❤️ Émot.</text>
+          <rect x="484" y="136" width="55" height="22" rx="7" fill="#e6f2fb" stroke="#0e8ce4" stroke-width="1" opacity=".5"/>
+          <text x="512" y="151" text-anchor="middle" font-family="Hanken Grotesk" font-size="10" fill="#0e8ce4">⏱️ Tend.</text>
+        </svg>
+        <div class="preview-gradient" style="background:linear-gradient(180deg,transparent 30%,var(--panel) 100%)"></div>
+      </div>
+      <div class="tool-body">
+        <span class="tool-badge" style="background:color-mix(in srgb,var(--accent2) 15%,transparent);color:var(--accent2);border-color:color-mix(in srgb,var(--accent2) 30%,transparent)">🧭 Outil 2</span>
+        <h3>Explorateur de Frontières</h3>
+        <p>Trois ateliers en un : identifiez vos non-clients (3 niveaux), cartographiez la chaîne d'acheteurs et explorez les Six Chemins de reconstruction des frontières.</p>
+        <div class="tool-features">
+          <div class="tf">Carte des Non-Clients — cercles concentriques interactifs</div>
+          <div class="tf">Chaîne d'Acheteurs — 4 rôles avec profils éditables</div>
+          <div class="tf">Six Chemins — questions déclencheuses + capture d'idées</div>
+          <div class="tf">Copilote stratégique contextuel à chaque étape</div>
+        </div>
+        <a href="blue-frontier-explorer.html" class="tool-cta" style="--accent:#16b6c6">
+          Ouvrir l'Explorateur <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="section" id="methode">
+  <div class="section-head fade-in">
+    <div class="eyebrow">Comment ça marche</div>
+    <h2>De l'analyse à l'océan bleu<br>en 3 phases</h2>
+    <p>Une progression logique calquée sur la méthode Kim & Mauborgne.</p>
+  </div>
+  <div class="steps">
+    <div class="step fade-in">
+      <div class="step-num">01</div>
+      <h4>Diagnostiquez votre océan rouge</h4>
+      <p>Tracez votre courbe de valeur actuelle sur le Strategy Canvas. Comparez-vous aux concurrents sur chaque facteur clé de l'industrie.</p>
+      <span class="tool-tag blue">🎨 Strategy Canvas</span>
+    </div>
+    <div class="step fade-in" style="transition-delay:.1s">
+      <div class="step-num">02</div>
+      <h4>Explorez au-delà de vos frontières</h4>
+      <p>Cartographiez vos non-clients sur 3 niveaux, analysez la chaîne d'acheteurs, et parcourez les Six Chemins pour générer des idées de rupture.</p>
+      <span class="tool-tag teal">🧭 Explorateur</span>
+    </div>
+    <div class="step fade-in" style="transition-delay:.2s">
+      <div class="step-num">03</div>
+      <h4>Dessinez votre courbe cible</h4>
+      <p>Revenez sur le Strategy Canvas pour tracer votre courbe Océan Bleu, calculer l'ERRC et mesurer votre indice de divergence.</p>
+      <span class="tool-tag blue">🎨 Strategy Canvas</span>
+    </div>
+  </div>
+</section>
+
+<!-- Coming soon -->
+<section class="section">
+  <div class="section-head fade-in">
+    <div class="eyebrow">Prochainement</div>
+    <h2>La suite de Blue Frontier</h2>
+    <p>De nouveaux outils sont en cours de conception pour compléter le parcours stratégique.</p>
+  </div>
+  <div class="soon-grid">
+    <div class="soon-card fade-in">
+      <div class="soon-icon">📊</div>
+      <h4>Grille ERRC standalone</h4>
+      <p>Un atelier dédié Éliminer / Réduire / Augmenter / Créer avec synchronisation automatique vers le Canvas.</p>
+      <span class="soon-tag">Bientôt</span>
+    </div>
+    <div class="soon-card fade-in">
+      <div class="soon-icon">🏆</div>
+      <h4>Blue Ocean Idea Index</h4>
+      <p>Score automatique de viabilité de votre idée sur les 4 piliers : Utilité, Prix, Coût, Adoption.</p>
+      <span class="soon-tag">Bientôt</span>
+    </div>
+    <div class="soon-card fade-in">
+      <div class="soon-icon">🗺️</div>
+      <h4>Carte d'Utilité Acheteur</h4>
+      <p>La grille 6×6 des leviers d'utilité sur le cycle d'expérience acheteur — identifier les points de douleur.</p>
+      <span class="soon-tag">Bientôt</span>
+    </div>
+    <div class="soon-card fade-in">
+      <div class="soon-icon">📤</div>
+      <h4>Export PowerPoint</h4>
+      <p>Générez un pitch deck Océan Bleu prêt à présenter avec vos canvas, ERRC et recommandations.</p>
+      <span class="soon-tag">Bientôt</span>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="foot-brand"><b>Blue</b> <em>Frontier</em></div>
+  <p>Basé sur la méthode <strong>Blue Ocean Strategy</strong> de W. Chan Kim & Renée Mauborgne.<br>
+  Prototype interactif — données 100% locales, rien n'est envoyé.</p>
+</footer>
 
 <script>
-(function(){
-  "use strict";
+// Theme toggle
+document.getElementById('themeBtn').onclick=function(){
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',dark?'light':'dark');
+  this.textContent=dark?'🌙':'☀️';
+};
 
-  /* ---------- Geometry ---------- */
-  const VB_W=1000, VB_H=600;
-  const PL=68, PR=964, PT=46, PB=470;      // plot bounds
-  const V_MAX=10;
-  const svg=document.getElementById('svg');
-  const SVGNS="http://www.w3.org/2000/svg";
-
-  const THEMES={
-    light:{current:'#e8643c',competitor:'#8497ab',target:'#0e8ce4',
-           grid:'#e2eaf1',zero:'#c9d6e1',ink:'#0d2233',muted:'#5e7184',faint:'#90a2b3',
-           pointStroke:'#ffffff',bg:'#ffffff'},
-    dark:{current:'#ff7a52',competitor:'#9ab0c4',target:'#2fa8ff',
-          grid:'#1a3047',zero:'#274056',ink:'#e9f2fa',muted:'#90a6ba',faint:'#5e7588',
-          pointStroke:'#0e1f31',bg:'#0a1726'}
-  };
-  let theme=THEMES.light;
-
-  /* ---------- State ---------- */
-  let uid=0; const nid=()=>'id'+(++uid);
-
-  const PRESETS={
-    fintech:{name:"FinTech pour seniors",
-      factors:["Prix","Frais de tenue","Appli mobile","Conseil humain","Sécurité anti-fraude","Simplicité d'usage","Lisibilité (gros caractères)"],
-      series:[
-        {n:"Banque classique",role:"current",   v:[8,8,4,7,6,3,3]},
-        {n:"Néobanque",       role:"competitor", v:[3,2,9,1,5,6,3]},
-        {n:"Cible (seniors)", role:"target",     v:[4,2,5,8,9,9,10]}
-      ]},
-    yellowtail:{name:"[yellow tail]",
-      factors:["Prix","Terminologie œnologique","Vieillissement","Prestige du vignoble","Complexité du vin","Gamme de vins","Facilité de consommation","Facilité de choix","Fun & aventure"],
-      series:[
-        {n:"Vins premium",     role:"current",   v:[9,8,8,9,8,8,3,2,2]},
-        {n:"Vins économiques", role:"competitor",v:[2,3,2,2,3,4,4,3,2]},
-        {n:"[yellow tail]",    role:"target",    v:[4,1,1,1,2,2,9,9,9]}
-      ]},
-    cirque:{name:"Cirque du Soleil",
-      factors:["Prix","Vedettes","Numéros animaux","Pistes multiples","Concessions","Fun & humour","Danger & sensations","Thème","Environnement raffiné","Musique & danse"],
-      series:[
-        {n:"Cirque traditionnel", role:"current",   v:[5,7,8,8,7,8,7,2,2,2]},
-        {n:"Cirques régionaux",   role:"competitor",v:[2,2,4,2,3,6,4,1,1,1]},
-        {n:"Cirque du Soleil",    role:"target",    v:[8,1,1,1,2,6,4,9,9,9]}
-      ]}
-  };
-
-  let factors=[], series=[];
-
-  function loadPreset(key){
-    const p=PRESETS[key]; if(!p) return;
-    document.getElementById('projName').value=p.name;
-    factors=p.factors.map(name=>({id:nid(),name}));
-    series=p.series.map(s=>{
-      const vals={}; factors.forEach((f,i)=>vals[f.id]=s.v[i]);
-      return {id:nid(),name:s.n,role:s.role,custom:null,visible:true,values:vals};
-    });
-    build();
-  }
-
-  /* ---------- Helpers ---------- */
-  const el=(t,a)=>{const e=document.createElementNS(SVGNS,t); if(a) for(const k in a) e.setAttribute(k,a[k]); return e;};
-  const xForIdx=(i,n)=> n<=1 ? (PL+PR)/2 : PL + i*(PR-PL)/(n-1);
-  const yForVal=v=> PB - (v/V_MAX)*(PB-PT);
-  const valForY=y=>{let v=(PB-y)/(PB-PT)*V_MAX; v=Math.round(v*2)/2; return Math.max(0,Math.min(V_MAX,v));};
-  const effColor=s=> s.custom || theme[s.role] || theme.competitor;
-
-  function wrapLabel(text,max){
-    const words=text.split(' '); const lines=[]; let cur='';
-    words.forEach(w=>{ if((cur+' '+w).trim().length<=max){cur=(cur+' '+w).trim();} else {if(cur)lines.push(cur); cur=w;} });
-    if(cur)lines.push(cur); return lines.slice(0,3);
-  }
-
-  /* ---------- Build the SVG (structural) ---------- */
-  const ptGroups={}, lineEls={};   // ptGroups[sid][fid] = <g>, lineEls[sid] = <polyline>
-
-  function build(){
-    while(svg.firstChild) svg.removeChild(svg.firstChild);
-    for(const k in ptGroups) delete ptGroups[k];
-    for(const k in lineEls) delete lineEls[k];
-
-    // gridlines + Y labels
-    for(let v=0; v<=V_MAX; v++){
-      const y=yForVal(v);
-      svg.appendChild(el('line',{x1:PL,y1:y,x2:PR,y2:y,class:v===0?'gline zero':'gline',stroke:v===0?theme.zero:theme.grid,'stroke-width':v===0?1.5:1}));
-    }
-    // Y axis labels Bas / Élevé
-    const yhi=el('text',{x:PL-14,y:PT+4,'text-anchor':'end',class:'axislab',fill:theme.faint}); yhi.textContent='Élevé'; svg.appendChild(yhi);
-    const ylo=el('text',{x:PL-14,y:PB+4,'text-anchor':'end',class:'axislab',fill:theme.faint}); ylo.textContent='Bas'; svg.appendChild(ylo);
-    // Y title (rotated)
-    const yt=el('text',{x:22,y:(PT+PB)/2,class:'ytitle',fill:theme.muted,'text-anchor':'middle',transform:`rotate(-90 22 ${(PT+PB)/2})`}); yt.textContent="Niveau de l'offre"; svg.appendChild(yt);
-
-    const n=factors.length;
-
-    // factor labels (x axis) + vertical guide
-    factors.forEach((f,i)=>{
-      const x=xForIdx(i,n);
-      svg.appendChild(el('line',{x1:x,y1:PT,x2:x,y2:PB,stroke:theme.grid,'stroke-width':1,'stroke-dasharray':'2 5',opacity:.7}));
-      const t=el('text',{x:x,y:PB+24,'text-anchor':'middle',class:'flab',fill:theme.ink});
-      wrapLabel(f.name,15).forEach((ln,k)=>{
-        const ts=el('tspan',{x:x,dy:k===0?0:14}); ts.textContent=ln; t.appendChild(ts);
-      });
-      svg.appendChild(t);
-    });
-
-    // series: polyline first (under points)
-    series.forEach(s=>{
-      const pl=el('polyline',{fill:'none',stroke:effColor(s),'stroke-width':s.role==='target'?3.4:2.4,
-        'stroke-linejoin':'round','stroke-linecap':'round',opacity:s.visible?1:0,
-        'stroke-dasharray':s.role==='competitor'?'7 6':'none'});
-      svg.appendChild(pl); lineEls[s.id]=pl;
-    });
-    // series points (above lines)
-    series.forEach(s=>{
-      ptGroups[s.id]={};
-      factors.forEach(f=>{
-        const g=el('g',{opacity:s.visible?1:0});
-        const hit=el('circle',{r:16,class:'pt-hit'});
-        const dot=el('circle',{r:s.role==='target'?6.5:5.5,fill:theme.bg,stroke:effColor(s),'stroke-width':3});
-        g.appendChild(hit); g.appendChild(dot);
-        attachDrag(hit,s.id,f.id);
-        attachHover(hit,s.id,f.id);
-        svg.appendChild(g);
-        ptGroups[s.id][f.id]=g;
-      });
-    });
-
-    series.forEach(s=>placeSeries(s.id));
-    renderSidebar();
-    renderFactors();
-    computeInsight();
-  }
-
-  function placeSeries(sid){
-    const s=series.find(x=>x.id===sid); if(!s) return;
-    const n=factors.length; const pts=[];
-    factors.forEach((f,i)=>{
-      const x=xForIdx(i,n), y=yForVal(s.values[f.id]??5);
-      pts.push(x+','+y);
-      const g=ptGroups[sid][f.id];
-      if(g) g.setAttribute('transform',`translate(${x},${y})`);
-    });
-    if(lineEls[sid]) lineEls[sid].setAttribute('points',pts.join(' '));
-  }
-
-  /* ---------- Drag ---------- */
-  let drag=null;
-  function svgPoint(evt){
-    const p=svg.createSVGPoint(); p.x=evt.clientX; p.y=evt.clientY;
-    return p.matrixTransform(svg.getScreenCTM().inverse());
-  }
-  function attachDrag(hit,sid,fid){
-    hit.addEventListener('pointerdown',e=>{
-      e.preventDefault();
-      const s=series.find(x=>x.id===sid); if(!s||!s.visible) return;
-      drag={sid,fid}; hit.setPointerCapture(e.pointerId);
-      moveDrag(e);
-    });
-    hit.addEventListener('pointermove',e=>{ if(drag&&drag.sid===sid&&drag.fid===fid) moveDrag(e); });
-    hit.addEventListener('pointerup',e=>{ drag=null; hideTip(); try{hit.releasePointerCapture(e.pointerId);}catch(_){} });
-    hit.addEventListener('pointercancel',()=>{drag=null;hideTip();});
-  }
-  function moveDrag(e){
-    const s=series.find(x=>x.id===drag.sid); const f=factors.find(x=>x.id===drag.fid);
-    const p=svgPoint(e); const v=valForY(p.y);
-    s.values[drag.fid]=v;
-    placeSeries(drag.sid);
-    computeInsight();
-    showTip(e, f.name, v, effColor(s));
-  }
-
-  /* ---------- Hover tooltip ---------- */
-  function attachHover(hit,sid,fid){
-    hit.addEventListener('pointerenter',e=>{
-      if(drag) return;
-      const s=series.find(x=>x.id===sid); const f=factors.find(x=>x.id===fid);
-      if(s&&s.visible) showTip(e,f.name,s.values[fid],effColor(s));
-    });
-    hit.addEventListener('pointerleave',()=>{ if(!drag) hideTip(); });
-  }
-  const tip=document.getElementById('tip');
-  function showTip(e,name,val,color){
-    tip.innerHTML=name+' · <b style="color:'+color+'">'+val.toFixed(1).replace('.0','')+'</b>/10';
-    tip.style.left=e.clientX+'px'; tip.style.top=e.clientY+'px'; tip.style.opacity='1';
-  }
-  function hideTip(){ tip.style.opacity='0'; }
-
-  /* ---------- Sidebar: series ---------- */
-  const ROLE_LABELS={current:'Actuel',competitor:'Concurrent',target:'Cible'};
-  function renderSidebar(){
-    const list=document.getElementById('seriesList'); list.innerHTML='';
-    series.forEach(s=>{
-      const row=document.createElement('div'); row.className='srow'+(s.visible?'':' off');
-      const sw=document.createElement('span'); sw.className='swatch'; sw.style.background=effColor(s);
-      const eye=document.createElement('button'); eye.className='eye'; eye.textContent=s.visible?'👁':'⊘'; eye.title='Afficher / masquer';
-      eye.onclick=()=>{s.visible=!s.visible; build();};
-      const name=document.createElement('input'); name.className='sname'; name.value=s.name;
-      name.oninput=()=>{s.name=name.value;};
-      const role=document.createElement('select');
-      ['current','competitor','target'].forEach(r=>{const o=document.createElement('option');o.value=r;o.textContent=ROLE_LABELS[r];if(s.role===r)o.selected=true;role.appendChild(o);});
-      role.onchange=()=>{s.role=role.value; s.custom=null; build();};
-      const col=document.createElement('input'); col.type='color'; col.value=toHex(effColor(s)); col.title='Couleur personnalisée';
-      col.oninput=()=>{s.custom=col.value; build();};
-      const del=document.createElement('button'); del.className='del'; del.textContent='✕'; del.title='Supprimer';
-      del.onclick=()=>{ if(series.length<=1)return; series=series.filter(x=>x.id!==s.id); build(); };
-      row.append(sw,eye,name,role,col,del);
-      list.appendChild(row);
-    });
-  }
-  function toHex(c){ // resolve named/theme hex (already hex here) -> ensure #rrggbb
-    if(/^#([0-9a-f]{6})$/i.test(c)) return c;
-    const cx=document.createElement('canvas').getContext('2d'); cx.fillStyle=c; return cx.fillStyle;
-  }
-  document.getElementById('addSeries').onclick=()=>{
-    const vals={}; factors.forEach(f=>vals[f.id]=5);
-    series.push({id:nid(),name:'Nouvelle courbe',role:'competitor',custom:null,visible:true,values:vals});
-    build();
-  };
-
-  /* ---------- Factor editor ---------- */
-  function renderFactors(){
-    const row=document.getElementById('factorRow'); row.innerHTML='';
-    factors.forEach((f,i)=>{
-      const c=document.createElement('div'); c.className='fchip';
-      const inp=document.createElement('input'); inp.value=f.name;
-      inp.oninput=()=>{f.name=inp.value; rebuildLabels();};
-      const bar=document.createElement('div'); bar.className='fbar';
-      const left=document.createElement('div');
-      const lb=mini('◀','Déplacer à gauche',()=>{ if(i>0){ [factors[i-1],factors[i]]=[factors[i],factors[i-1]]; build(); }});
-      const rb=mini('▶','Déplacer à droite',()=>{ if(i<factors.length-1){ [factors[i+1],factors[i]]=[factors[i],factors[i+1]]; build(); }});
-      left.append(lb,rb);
-      const db=mini('✕','Supprimer',()=>{ if(factors.length<=2)return; const id=f.id; factors=factors.filter(x=>x.id!==id); series.forEach(s=>delete s.values[id]); build(); });
-      bar.append(left,db);
-      c.append(inp,bar); row.appendChild(c);
-    });
-    const add=document.createElement('div'); add.className='fchip add'; add.textContent='+ Facteur';
-    add.onclick=()=>{ const f={id:nid(),name:'Nouveau facteur'}; factors.push(f); series.forEach(s=>s.values[f.id]=5); build(); };
-    row.appendChild(add);
-  }
-  function mini(txt,title,fn){const b=document.createElement('button');b.className='minibtn';b.textContent=txt;b.title=title;b.onclick=fn;return b;}
-  function rebuildLabels(){ // light: just redraw labels without full rebuild
-    build();
-  }
-
-  /* ---------- Insight engine (ERRC + divergence) ---------- */
-  function computeInsight(){
-    const target=series.find(s=>s.role==='target'&&s.visible);
-    const current=series.find(s=>s.role==='current'&&s.visible);
-    let eli=0,rai=0,red=0,cre=0;
-    if(target&&current){
-      factors.forEach(f=>{
-        const t=target.values[f.id], c=current.values[f.id];
-        if(c>=6 && t<=2) eli++;
-        else if(c<=2 && t>=6) cre++;
-        else if(t-c>=1.5) rai++;
-        else if(c-t>=1.5) red++;
-      });
-    }
-    document.getElementById('cEli').textContent=eli;
-    document.getElementById('cRai').textContent=rai;
-    document.getElementById('cRed').textContent=red;
-    document.getElementById('cCre').textContent=cre;
-
-    // divergence: target vs mean of other visible series
-    let div=0, verdict='—', vColor=theme.muted;
-    const others=series.filter(s=>s!==target && s.visible);
-    if(target && others.length){
-      let sum=0,cnt=0;
-      factors.forEach(f=>{
-        const m=others.reduce((a,s)=>a+(s.values[f.id]??0),0)/others.length;
-        sum+=Math.abs((target.values[f.id]??0)-m); cnt++;
-      });
-      div=Math.round(sum/cnt/V_MAX*100);
-    }
-    document.getElementById('meterFill').style.width=div+'%';
-    if(target){
-      if(div>=50){verdict='Océan bleu';vColor=theme.target;}
-      else if(div>=25){verdict='En transition';vColor='#e8a93c';}
-      else {verdict='Océan rouge';vColor='#e8643c';}
-    }
-    const vEl=document.getElementById('verdict'); vEl.textContent=verdict; vEl.style.color=vColor;
-
-    // Co-Pilot message
-    let msg;
-    if(!target){
-      msg="Attribuez le rôle <b>Cible</b> à une courbe pour mesurer votre divergence et générer les actions ERRC.";
-    } else if(current){
-      const overlap=factors.filter(f=>Math.abs(target.values[f.id]-current.values[f.id])<1).length;
-      if(cre===0){
-        msg="Aucun facteur à <b>Créer</b> : votre cible reste dans les codes du secteur. Cherchez ce que <b>personne</b> n'offre encore.";
-      } else if(overlap>=Math.ceil(factors.length/2)){
-        msg="Votre cible recoupe <b>"+overlap+"</b> facteurs avec l'existant. Osez davantage d'écart pour quitter l'océan rouge.";
-      } else if(div>=50){
-        msg="Belle divergence ✦ Votre courbe cible sort des sentiers battus. Vérifiez que la valeur créée est <b>désirée</b> par des non-clients.";
-      } else {
-        msg="Bon début. Accentuez les facteurs à <b>Créer</b> et à <b>Éliminer</b> pour creuser l'écart concurrentiel.";
-      }
-    } else {
-      msg="Ajoutez une courbe au rôle <b>Actuel</b> (votre offre d'aujourd'hui) pour activer la lecture ERRC.";
-    }
-    document.getElementById('copilotMsg').innerHTML=msg;
-  }
-
-  /* ---------- Theme ---------- */
-  document.getElementById('theme').onclick=()=>{
-    const dark=document.documentElement.getAttribute('data-theme')==='dark';
-    document.documentElement.setAttribute('data-theme',dark?'light':'dark');
-    document.getElementById('theme').textContent=dark?'🌙':'☀️';
-    theme=dark?THEMES.light:THEMES.dark;
-    build();
-  };
-
-  /* ---------- Preset loader ---------- */
-  document.getElementById('preset').onchange=function(){ if(this.value){ loadPreset(this.value); this.value=''; } };
-
-  /* ---------- Export PNG ---------- */
-  document.getElementById('export').onclick=()=>{
-    const clone=svg.cloneNode(true);
-    clone.querySelectorAll('.pt-hit').forEach(n=>n.remove());
-    const bg=el('rect',{x:0,y:0,width:VB_W,height:VB_H,fill:theme.bg});
-    clone.insertBefore(bg,clone.firstChild);
-    clone.setAttribute('xmlns',SVGNS);
-    const data=new XMLSerializer().serializeToString(clone);
-    const svg64='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(data)));
-    const img=new Image();
-    img.onload=()=>{
-      const scale=2, cv=document.createElement('canvas');
-      cv.width=VB_W*scale; cv.height=VB_H*scale;
-      const cx=cv.getContext('2d'); cx.scale(scale,scale); cx.drawImage(img,0,0);
-      const a=document.createElement('a');
-      a.download=(document.getElementById('projName').value||'strategy-canvas').replace(/[^\w\-]+/g,'_')+'.png';
-      a.href=cv.toDataURL('image/png'); a.click();
-    };
-    img.src=svg64;
-  };
-
-  /* ---------- Init ---------- */
-  loadPreset('fintech');
-})();
+// Scroll fade-in
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:.15});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
 </script>
 </body>
 </html>
