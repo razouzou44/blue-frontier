@@ -211,6 +211,58 @@ body{
 .stat-card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px;text-align:center;box-shadow:var(--shadow)}
 .stat-card .sv{font-family:"Fraunces",serif;font-size:26px;font-weight:600;color:var(--accent)}
 .stat-card .sk{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--faint);margin-top:3px}
+
+/* ── Print / PDF ── */
+.print-view{display:none}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body{background:#fff!important;padding:0;margin:0}
+  .wrap{display:none!important}
+  .print-view{display:block!important;font-family:"Hanken Grotesk",sans-serif;color:#0d2233}
+  @page{size:A4 portrait;margin:1.4cm 1.6cm}
+  .pv-page{page-break-after:always}
+  .pv-page:last-child{page-break-after:avoid}
+}
+.pv-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:2px solid #0e8ce4;margin-bottom:18px}
+.pv-brand{display:flex;align-items:center;gap:9px}
+.pv-logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(145deg,#0e8ce4,#16b6c6);position:relative;flex:none}
+.pv-logo::before{content:"";position:absolute;inset:6px 5px;border-radius:50%;border:2px solid rgba(255,255,255,.9);border-top-color:transparent;transform:rotate(-20deg)}
+.pv-title{font-family:"Fraunces",serif;font-size:14px;font-weight:700;color:#0d2233}
+.pv-title span{color:#0e8ce4}
+.pv-meta{text-align:right;font-size:11px;color:#5e7184}
+.pv-meta b{display:block;font-size:13px;color:#0d2233;font-family:"Fraunces",serif;font-weight:600}
+.pv-sec{font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#0e8ce4;margin:16px 0 8px;display:flex;align-items:center;gap:7px}
+.pv-sec::after{content:"";flex:1;height:1px;background:#e0eaf2}
+.pv-tier{border-radius:10px;padding:12px 14px;margin-bottom:10px;border-left:4px solid}
+.pv-tier h4{font-family:"Fraunces",serif;font-size:14px;font-weight:600;margin-bottom:6px}
+.pv-tier .trow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.pv-tier .tcell .tk{font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#5e7184;margin-bottom:3px}
+.pv-tier .tcell .tv{font-size:12px;color:#0d2233;line-height:1.4}
+.pv-profiles{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.pv-profiles span{background:#f4f8fc;border:1px solid #e0eaf2;border-radius:6px;padding:3px 9px;font-size:11.5px;font-weight:600}
+.pv-shared{background:#e6f2fb;border:1px solid #b8d8f0;border-radius:10px;padding:12px 14px}
+.pv-shared .sk{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#0e8ce4;margin-bottom:5px}
+.pv-shared p{font-size:12.5px;color:#0d2233;line-height:1.5}
+.pv-chain{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pv-buyer{border:1.5px solid #e0eaf2;border-radius:10px;padding:11px 13px}
+.pv-buyer .bhead{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.pv-buyer .bicon{font-size:18px}
+.pv-buyer .btitle{font-family:"Fraunces",serif;font-size:13px;font-weight:600}
+.pv-buyer .brole{font-size:10px;color:#5e7184;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.pv-buyer .bfield{margin-top:6px}
+.pv-buyer .bfield .bk{font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#5e7184;margin-bottom:2px}
+.pv-buyer .bfield .bv{font-size:12px;color:#0d2233;line-height:1.4}
+.pv-paths{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pv-path{border:1.5px solid #e0eaf2;border-radius:10px;padding:11px 13px}
+.pv-path.done-p{border-color:#16b6c6;background:#f0fdfb}
+.pv-path .phead{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.pv-path .pnum{width:22px;height:22px;border-radius:7px;background:#e6f2fb;color:#0e8ce4;font-size:10px;font-weight:800;display:grid;place-items:center;flex:none}
+.pv-path.done-p .pnum{background:#16b6c6;color:#fff}
+.pv-path .ptitle{font-family:"Fraunces",serif;font-size:12.5px;font-weight:600;flex:1}
+.pv-path .pcheck{font-size:12px}
+.pv-path .pideas{font-size:11.5px;color:#5e7184;line-height:1.45;margin-top:4px;font-style:italic}
+.pv-path .pideas.empty{color:#c0cdd8}
+.pv-footer{margin-top:18px;padding-top:10px;border-top:1px solid #e0eaf2;display:flex;justify-content:space-between;font-size:10px;color:#90a2b3}
 </style>
 </head>
 <body>
@@ -225,6 +277,7 @@ body{
     <span class="crumb">/ Explorateur de Frontières</span>
     <div class="spacer"></div>
     <span class="pill">Companion #2</span>
+    <button class="btn" id="exportPdf" style="border-color:#e8643c;color:#e8643c">📄 Export PDF</button>
     <button class="btn ghost icon" id="themeBtn" title="Thème">🌙</button>
   </header>
 
@@ -392,25 +445,25 @@ const tiers={
 let sharedNeed='';
 
 const buyers=[
-  {id:'ach',role:'Acheteur',icon:'💳',bg:'#e6f2fb',desc:'Qui paie la décision d\'achat',nom:'',valeur:'',frustr:''},
+  {id:'ach',role:'Acheteur',icon:'💳',bg:'#e6f2fb',desc:"Qui paie la décision d'achat",nom:'',valeur:'',frustr:''},
   {id:'dec',role:'Décideur',icon:'🧭',bg:'#fff6e6',desc:'Qui prend la décision finale',nom:'',valeur:'',frustr:''},
   {id:'pre',role:'Prescripteur',icon:'💬',bg:'#ffeee9',desc:'Qui influence ou recommande',nom:'',valeur:'',frustr:''},
   {id:'uti',role:'Utilisateur',icon:'👤',bg:'#e8f8f5',desc:'Qui utilise au quotidien',nom:'',valeur:'',frustr:''}
 ];
 
 const paths=[
-  {id:1,icon:'🔀',title:'Industries alternatives',done:false,open:false,
-   q:'Vers quelles solutions vos clients se tournent-ils quand ils n\'achètent PAS dans votre industrie ? Pourquoi ? Qu\'est-ce qui les attire là-bas ?',ideas:''},
-  {id:2,icon:'📊',title:'Groupes stratégiques',done:false,open:false,
-   q:'Quels groupes stratégiques coexistent dans votre industrie ? (ex: luxe vs low-cost). Pourquoi les clients choisissent-ils l\'un plutôt que l\'autre ?',ideas:''},
-  {id:3,icon:'🔗',title:'Chaîne d\'acheteurs',done:false,open:false,
-   q:'Qui sont vraiment les acheteurs, utilisateurs et prescripteurs ? Que se passe-t-il si vous ciblez un acteur différent de celui que l\'industrie vise habituellement ?',ideas:''},
-  {id:4,icon:'🧩',title:'Compléments de l\'offre',done:false,open:false,
-   q:'Quel est le contexte total d\'usage de votre produit ou service ? Quels produits / services complémentaires entourent l\'expérience de l\'acheteur avant, pendant et après ?',ideas:''},
-  {id:5,icon:'❤️',title:'Fonctionnel ↔ Émotionnel',done:false,open:false,
-   q:'Votre industrie concourt-elle sur le fonctionnel ou sur l\'émotionnel ? Que se passe-t-il si vous renversez cette orientation dominante ?',ideas:''},
-  {id:6,icon:'⏱️',title:'Tendances dans le temps',done:false,open:false,
-   q:'Quelles tendances irréversibles façonnent votre industrie ? Si vous suivez cette tendance jusqu\'au bout, comment votre offre doit-elle évoluer ?',ideas:''}
+  {id:1,icon:'🔀',title:"Industries alternatives",done:false,open:false,
+   q:"Vers quelles solutions vos clients se tournent-ils quand ils n'achètent PAS dans votre industrie ? Pourquoi ? Qu'est-ce qui les attire là-bas ?",ideas:''},
+  {id:2,icon:'📊',title:"Groupes stratégiques",done:false,open:false,
+   q:"Quels groupes stratégiques coexistent dans votre industrie ? (ex: luxe vs low-cost). Pourquoi les clients choisissent-ils l'un plutôt que l'autre ?",ideas:''},
+  {id:3,icon:'🔗',title:"Chaîne d'acheteurs",done:false,open:false,
+   q:"Qui sont vraiment les acheteurs, utilisateurs et prescripteurs ? Que se passe-t-il si vous ciblez un acteur différent de celui que l'industrie vise habituellement ?",ideas:''},
+  {id:4,icon:'🧩',title:"Compléments de l'offre",done:false,open:false,
+   q:"Quel est le contexte total d'usage de votre produit ou service ? Quels produits / services complémentaires entourent l'expérience de l'acheteur avant, pendant et après ?",ideas:''},
+  {id:5,icon:'❤️',title:"Fonctionnel ↔ Émotionnel",done:false,open:false,
+   q:"Votre industrie concourt-elle sur le fonctionnel ou sur l'émotionnel ? Que se passe-t-il si vous renversez cette orientation dominante ?",ideas:''},
+  {id:6,icon:'⏱️',title:"Tendances dans le temps",done:false,open:false,
+   q:"Quelles tendances irréversibles façonnent votre industrie ? Si vous suivez cette tendance jusqu'au bout, comment votre offre doit-elle évoluer ?",ideas:''}
 ];
 
 let uid=0; const nid=()=>'x'+(++uid);
@@ -536,8 +589,8 @@ function renderChain(){
     const desc=document.createElement('div'); desc.className='buyer-desc'; desc.textContent=b.desc;
 
     const fields=document.createElement('div'); fields.className='buyer-fields';
-    [['valeur','Ce qu\'il valorise','Quels critères guident sa décision ?'],
-     ['frustr','Ses frustrations','Qu\'est-ce qui l\'agace ou le freine actuellement ?']
+    [['valeur',"Ce qu'il valorise","Quels critères guident sa décision ?"],
+     ['frustr',"Ses frustrations","Qu'est-ce qui l'agace ou le freine actuellement ?"]
     ].forEach(([key,lbl,ph])=>{
       const bf=document.createElement('div'); bf.className='bf';
       const l=document.createElement('div'); l.className='lbl'; l.textContent=lbl;
@@ -576,8 +629,8 @@ function computeChainInsight(){
   const filledB=buyers.filter(b=>b.valeur.trim());
   const igs=[
     {label:'Rôles renseignés',val:filledB.length+' / '+buyers.length,txt:'Complétez tous les rôles pour une vision à 360°'},
-    {label:'Frustrations identifiées',val:buyers.filter(b=>b.frustr.trim()).length,txt:'Chaque frustration est un levier d\'innovation'},
-    {label:'Acteur sous-estimé',val:buyers.find(b=>!b.valeur.trim())?.role||'Tous renseignés',txt:'Ciblez celui que l\'industrie ignore'}
+    {label:'Frustrations identifiées',val:buyers.filter(b=>b.frustr.trim()).length,txt:"Chaque frustration est un levier d'innovation"},
+    {label:'Acteur sous-estimé',val:buyers.find(b=>!b.valeur.trim())?.role||'Tous renseignés',txt:"Ciblez celui que l'industrie ignore"}
   ];
   igs.forEach(d=>{
     const c=document.createElement('div'); c.className='ci-card';
@@ -661,6 +714,92 @@ document.getElementById('themeBtn').onclick=function(){
   const dark=document.documentElement.getAttribute('data-theme')==='dark';
   document.documentElement.setAttribute('data-theme',dark?'light':'dark');
   this.textContent=dark?'🌙':'☀️';
+};
+
+/* ── PDF Export ── */
+document.getElementById('exportPdf').onclick=function(){
+  const now=new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+  const TIER_COLORS={1:'#f59c3a',2:'#e8643c',3:'#0e8ce4'};
+  const TIER_BG={1:'#fff9f0',2:'#fff4f2',3:'#f0f7ff'};
+  const TIER_NAMES={1:'Niveau 1 — Bientôt clients',2:'Niveau 2 — Refusants',3:'Niveau 3 — Inexplorés'};
+  const BUYER_ICONS={ach:'💳',dec:'🧭',pre:'💬',uti:'👤'};
+
+  // Non-clients HTML
+  const tierHTML=[1,2,3].map(i=>{
+    const t=tiers[i];
+    const profs=t.profiles.map(p=>'<span>'+p.name+'</span>').join('');
+    return `<div class="pv-tier" style="border-color:${TIER_COLORS[i]};background:${TIER_BG[i]}">
+      <h4>${TIER_NAMES[i]}</h4>
+      ${profs?'<div class="pv-profiles">'+profs+'</div>':'<div style="font-size:11.5px;color:#90a2b3;font-style:italic">Aucun profil renseigné</div>'}
+      <div class="trow">
+        <div class="tcell"><div class="tk">Raison de non-achat</div><div class="tv">${t.raison||'<span style="color:#90a2b3;font-style:italic">Non renseigné</span>'}</div></div>
+        <div class="tcell"><div class="tk">Ce qui pourrait attirer</div><div class="tv">${t.attracteur||'<span style="color:#90a2b3;font-style:italic">Non renseigné</span>'}</div></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const sharedHTML=sharedNeed.trim()
+    ?`<div class="pv-shared"><div class="sk">✦ Besoin commun aux 3 niveaux</div><p>${sharedNeed}</p></div>`
+    :`<div class="pv-shared" style="opacity:.5"><div class="sk">✦ Besoin commun aux 3 niveaux</div><p style="font-style:italic;color:#5e7184">Non renseigné — c'est ici que se cache l'océan bleu.</p></div>`;
+
+  // Buyers HTML
+  const buyersHTML=buyers.map(b=>`
+    <div class="pv-buyer">
+      <div class="bhead"><span class="bicon">${b.icon}</span><div><div class="btitle">${b.nom||b.role}</div><div class="brole">${b.role}</div></div></div>
+      <div class="bfield"><div class="bk">Ce qu'il valorise</div><div class="bv">${b.valeur||'<span style="color:#90a2b3;font-style:italic">Non renseigné</span>'}</div></div>
+      <div class="bfield" style="margin-top:6px"><div class="bk">Ses frustrations</div><div class="bv">${b.frustr||'<span style="color:#90a2b3;font-style:italic">Non renseigné</span>'}</div></div>
+    </div>`).join('');
+
+  // Paths HTML
+  const pathsHTML=paths.map(p=>`
+    <div class="pv-path ${p.done?'done-p':''}">
+      <div class="phead">
+        <div class="pnum">${p.id}</div>
+        <div class="ptitle">${p.icon} ${p.title}</div>
+        <span class="pcheck">${p.done?'✅':''}</span>
+      </div>
+      <div class="pideas ${p.ideas.trim()?'':'empty'}">${p.ideas.trim()||'Pas encore exploré'}</div>
+    </div>`).join('');
+
+  const doneCnt=paths.filter(p=>p.done).length;
+
+  // Build and inject
+  let pv=document.getElementById('printView');
+  if(!pv){pv=document.createElement('div');pv.id='printView';document.body.appendChild(pv);}
+  pv.className='print-view';
+  pv.innerHTML=`
+<div class="pv-page">
+  <div class="pv-head">
+    <div class="pv-brand"><div class="pv-logo"></div><div class="pv-title"><b>Blue</b> <span>Frontier</span> · Explorateur de Frontières</div></div>
+    <div class="pv-meta"><b>Rapport stratégique</b>Généré le ${now}</div>
+  </div>
+  <div class="pv-sec">🎯 Carte des Non-Clients</div>
+  ${tierHTML}
+  ${sharedHTML}
+  <div class="pv-footer"><span>Blue Frontier — Stratégie Océan Bleu · Kim & Mauborgne</span><span>Page 1 / 3</span></div>
+</div>
+
+<div class="pv-page">
+  <div class="pv-head">
+    <div class="pv-brand"><div class="pv-logo"></div><div class="pv-title"><b>Blue</b> <span>Frontier</span> · Chaîne d'Acheteurs</div></div>
+    <div class="pv-meta"><b>Rapport stratégique</b>Généré le ${now}</div>
+  </div>
+  <div class="pv-sec">🔗 Chaîne d'Acheteurs — 4 rôles</div>
+  <div class="pv-chain">${buyersHTML}</div>
+  <div class="pv-footer"><span>Blue Frontier — Stratégie Océan Bleu · Kim & Mauborgne</span><span>Page 2 / 3</span></div>
+</div>
+
+<div class="pv-page">
+  <div class="pv-head">
+    <div class="pv-brand"><div class="pv-logo"></div><div class="pv-title"><b>Blue</b> <span>Frontier</span> · Six Chemins</div></div>
+    <div class="pv-meta"><b>Rapport stratégique</b>Généré le ${now}</div>
+  </div>
+  <div class="pv-sec">🧭 Six Chemins de Reconstruction — ${doneCnt}/6 explorés</div>
+  <div class="pv-paths">${pathsHTML}</div>
+  <div class="pv-footer"><span>Blue Frontier — Stratégie Océan Bleu · Kim & Mauborgne</span><span>Page 3 / 3</span></div>
+</div>`;
+
+  setTimeout(()=>window.print(), 120);
 };
 
 /* ── Init ── */

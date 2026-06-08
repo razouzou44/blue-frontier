@@ -151,6 +151,52 @@ svg.canvas{display:block;width:100%;height:auto;user-select:none;-webkit-user-se
 #tip b{color:var(--accent);font-weight:800}
 
 .foot{max-width:1240px;margin:18px auto 0;padding:0 20px;color:var(--faint);font-size:11.5px;text-align:center}
+
+/* ── Print / PDF ── */
+.print-view{display:none}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body{background:#fff!important;padding:0;margin:0}
+  .wrap,.topbar,.grid,.factors,.foot,#tip{display:none!important}
+  .print-view{display:block!important;font-family:"Hanken Grotesk",sans-serif;color:#0d2233;padding:0;margin:0}
+  @page{size:A4 landscape;margin:1.4cm 1.6cm}
+  .pv-page{page-break-after:always}
+  .pv-page:last-child{page-break-after:avoid}
+}
+.pv-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid #0e8ce4;margin-bottom:20px}
+.pv-brand{display:flex;align-items:center;gap:10px}
+.pv-logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#0e8ce4,#16b6c6);position:relative;flex:none}
+.pv-logo::before{content:"";position:absolute;inset:7px 6px;border-radius:50%;border:2px solid rgba(255,255,255,.9);border-top-color:transparent;transform:rotate(-20deg)}
+.pv-title{font-family:"Fraunces",serif;font-size:15px;font-weight:700;color:#0d2233}
+.pv-title span{color:#0e8ce4}
+.pv-meta{text-align:right;font-size:11px;color:#5e7184}
+.pv-meta b{display:block;font-size:14px;color:#0d2233;font-family:"Fraunces",serif;font-weight:600}
+.pv-section{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#0e8ce4;margin:18px 0 10px}
+.pv-canvas-wrap{text-align:center;background:#f4f8fc;border-radius:12px;padding:12px;border:1px solid #e0eaf2}
+.pv-canvas-wrap img{max-width:100%;height:auto}
+.pv-legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:10px;justify-content:center}
+.pv-leg-item{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#0d2233}
+.pv-leg-dot{width:28px;height:4px;border-radius:2px}
+.pv-errc{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.pv-eq{border-radius:10px;padding:12px 14px;border-left:4px solid}
+.pv-eq .ek{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#5e7184;margin-bottom:4px}
+.pv-eq .ev{font-family:"Fraunces",serif;font-size:26px;font-weight:700;line-height:1}
+.pv-eq .edet{font-size:11.5px;color:#5e7184;margin-top:6px;line-height:1.4}
+.pv-eq.eli{background:#fff4f2;border-color:#e8643c}.pv-eq.rai{background:#e8f8f5;border-color:#16b6c6}
+.pv-eq.red{background:#fff8ed;border-color:#e8a93c}.pv-eq.cre{background:#e6f2fb;border-color:#0e8ce4}
+.pv-score{display:flex;align-items:center;gap:20px;background:#f4f8fc;border-radius:12px;padding:16px 20px;border:1px solid #e0eaf2;margin-top:4px}
+.pv-score-num{font-family:"Fraunces",serif;font-size:48px;font-weight:700;color:#0e8ce4;line-height:1;flex:none}
+.pv-score-info h4{font-family:"Fraunces",serif;font-size:16px;font-weight:600;margin-bottom:4px}
+.pv-score-info p{font-size:12.5px;color:#5e7184;line-height:1.5}
+.pv-verdict{display:inline-block;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-top:6px}
+.pv-grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pv-copilot{background:#e6f2fb;border:1px solid #b8d8f0;border-radius:10px;padding:14px 16px;margin-top:4px}
+.pv-copilot .cpk{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#0e8ce4;margin-bottom:6px}
+.pv-copilot p{font-size:13px;color:#0d2233;line-height:1.55}
+.pv-factors{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.pv-ftag{background:#f4f8fc;border:1px solid #e0eaf2;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:600;color:#0d2233}
+.pv-footer{margin-top:20px;padding-top:12px;border-top:1px solid #e0eaf2;display:flex;justify-content:space-between;align-items:center;font-size:10.5px;color:#90a2b3}
+
 @media (max-width:900px){
   .grid{grid-template-columns:1fr}
   .proj input{min-width:120px}
@@ -184,6 +230,7 @@ svg.canvas{display:block;width:100%;height:auto;user-select:none;-webkit-user-se
       <option value="cirque">🎪 Cirque du Soleil</option>
     </select>
     <button class="btn ghost icon" id="theme" title="Thème clair / sombre">🌙</button>
+    <button class="btn" id="exportPdf" style="border-color:#e8643c;color:#e8643c">📄 Export PDF</button>
     <button class="btn accent" id="export">↧ Export PNG</button>
   </header>
 
@@ -236,6 +283,7 @@ svg.canvas{display:block;width:100%;height:auto;user-select:none;-webkit-user-se
 </div>
 
 <div class="foot">Prototype interactif — Blue Frontier · Strategy Canvas. Les données restent en mémoire (rien n'est envoyé). Glisser-déposer des points · ERRC en direct · rôles Actuel / Concurrent / Cible.</div>
+<div class="print-view" id="printView"></div>
 <div id="tip"></div>
 
 <script>
@@ -573,6 +621,143 @@ svg.canvas{display:block;width:100%;height:auto;user-select:none;-webkit-user-se
       a.href=cv.toDataURL('image/png'); a.click();
     };
     img.src=svg64;
+  };
+
+  /* ---------- PDF Export ---------- */
+  document.getElementById('exportPdf').onclick=()=>{
+    // Capture SVG as data URL
+    const clone=svg.cloneNode(true);
+    clone.querySelectorAll('.pt-hit').forEach(n=>n.remove());
+    const bgRect=el('rect',{x:0,y:0,width:VB_W,height:VB_H,fill:'#ffffff'});
+    clone.insertBefore(bgRect,clone.firstChild);
+    clone.setAttribute('xmlns',SVGNS);
+    const svgData=new XMLSerializer().serializeToString(clone);
+    const svgB64='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(svgData)));
+
+    const projName=document.getElementById('projName').value||'Mon projet';
+    const now=new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+    const eli=document.getElementById('cEli').textContent;
+    const rai=document.getElementById('cRai').textContent;
+    const red=document.getElementById('cRed').textContent;
+    const cre=document.getElementById('cCre').textContent;
+    const verdictTxt=document.getElementById('verdict').textContent||'—';
+    const meterW=document.getElementById('meterFill').style.width||'0%';
+    const divScore=parseInt(meterW)||0;
+    const cpMsg=document.getElementById('copilotMsg').innerHTML||'';
+    const verdictColor=verdictTxt==='Océan bleu'?'#0e8ce4':verdictTxt==='En transition'?'#e8a93c':'#e8643c';
+    const verdictBg=verdictTxt==='Océan bleu'?'#e6f2fb':verdictTxt==='En transition'?'#fff8ed':'#fff4f2';
+
+    // Build ERRC detail lists from state (current vs target)
+    const target=series.find(s=>s.role==='target'&&s.visible);
+    const current=series.find(s=>s.role==='current'&&s.visible);
+    const errcLists={eli:[],rai:[],red:[],cre:[]};
+    if(target&&current){
+      factors.forEach(f=>{
+        const t=target.values[f.id]??0, c=current.values[f.id]??0;
+        if(c>=6&&t<=2) errcLists.eli.push(f.name);
+        else if(c<=2&&t>=6) errcLists.cre.push(f.name);
+        else if(t-c>=1.5) errcLists.rai.push(f.name);
+        else if(c-t>=1.5) errcLists.red.push(f.name);
+      });
+    }
+    const listOf=arr=>arr.length?arr.map(n=>'<span style="display:inline-block;background:#fff;border:1px solid #ddd;border-radius:5px;padding:2px 7px;margin:2px 2px 0 0;font-size:11px">'+n+'</span>').join(''):'<span style="font-size:11px;color:#90a2b3;font-style:italic">Aucun</span>';
+
+    // Legend
+    const legHTML=series.filter(s=>s.visible).map(s=>{
+      const col=effColor(s);
+      const dash=s.role==='competitor'?'border-top:3px dashed '+col+';background:none':'background:'+col;
+      return '<div class="pv-leg-item"><div class="pv-leg-dot" style="'+dash+'"></div><span>'+s.name+' <span style="color:#90a2b3;font-weight:400">('+{current:'Actuel',competitor:'Concurrent',target:'Cible'}[s.role]+')</span></span></div>';
+    }).join('');
+
+    // Factor tags
+    const factorHTML=factors.map(f=>'<span class="pv-ftag">'+f.name+'</span>').join('');
+
+    const pv=document.getElementById('printView');
+    pv.innerHTML=`
+<div class="pv-page">
+  <div class="pv-head">
+    <div class="pv-brand">
+      <div class="pv-logo"></div>
+      <div class="pv-title"><b>Blue</b> <span>Frontier</span> · Strategy Canvas</div>
+    </div>
+    <div class="pv-meta"><b>${projName}</b>Généré le ${now}</div>
+  </div>
+
+  <div class="pv-section">📊 Courbe de valeur — Strategy Canvas</div>
+  <div class="pv-canvas-wrap">
+    <img src="${svgB64}" alt="Strategy Canvas" style="max-width:100%;max-height:340px">
+  </div>
+  <div class="pv-legend">${legHTML}</div>
+
+  <div class="pv-section" style="margin-top:16px">⟳ Facteurs de concurrence</div>
+  <div class="pv-factors">${factorHTML}</div>
+
+  <div class="pv-footer">
+    <span>Blue Frontier — Stratégie Océan Bleu · Kim & Mauborgne</span>
+    <span>Page 1 / 2</span>
+  </div>
+</div>
+
+<div class="pv-page">
+  <div class="pv-head">
+    <div class="pv-brand">
+      <div class="pv-logo"></div>
+      <div class="pv-title"><b>Blue</b> <span>Frontier</span> · Analyse ERRC & Score</div>
+    </div>
+    <div class="pv-meta"><b>${projName}</b>Généré le ${now}</div>
+  </div>
+
+  <div class="pv-grid2">
+    <div>
+      <div class="pv-section">📋 Grille ERRC</div>
+      <div class="pv-errc">
+        <div class="pv-eq eli">
+          <div class="ek">Éliminer</div>
+          <div class="ev">${eli}</div>
+          <div class="edet">${listOf(errcLists.eli)}</div>
+        </div>
+        <div class="pv-eq rai">
+          <div class="ek">Augmenter</div>
+          <div class="ev">${rai}</div>
+          <div class="edet">${listOf(errcLists.rai)}</div>
+        </div>
+        <div class="pv-eq red">
+          <div class="ek">Réduire</div>
+          <div class="ev">${red}</div>
+          <div class="edet">${listOf(errcLists.red)}</div>
+        </div>
+        <div class="pv-eq cre">
+          <div class="ek">Créer</div>
+          <div class="ev">${cre}</div>
+          <div class="edet">${listOf(errcLists.cre)}</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="pv-section">🎯 Indice de divergence</div>
+      <div class="pv-score">
+        <div class="pv-score-num">${divScore}</div>
+        <div class="pv-score-info">
+          <h4>/ 100</h4>
+          <p>Mesure l'écart entre votre courbe cible et les courbes concurrentes. Plus l'indice est élevé, plus votre stratégie diverge des normes du secteur.</p>
+          <span class="pv-verdict" style="color:${verdictColor};background:${verdictBg}">${verdictTxt}</span>
+        </div>
+      </div>
+      <div class="pv-section">✦ Recommandation Co-Pilot</div>
+      <div class="pv-copilot">
+        <div class="cpk">Analyse Blue Frontier</div>
+        <p>${cpMsg}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pv-footer">
+    <span>Blue Frontier — Stratégie Océan Bleu · Kim & Mauborgne</span>
+    <span>Page 2 / 2</span>
+  </div>
+</div>`;
+
+    setTimeout(()=>{ window.print(); },120);
   };
 
   /* ---------- Init ---------- */
